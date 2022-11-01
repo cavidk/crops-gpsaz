@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {Component, useEffect} from 'react';
 import {FormControl, Select, MenuItem} from '@material-ui/core';
 import {withRouter} from '../map/withRouter';
 import DatePicker, {registerLocale} from "react-datepicker";
@@ -11,9 +11,7 @@ import GeometryUtil from "leaflet-geometryutil";
 import Moment from "moment/moment";
 import Box from '@material-ui/core/Box';
 import Slider from '@material-ui/core/Slider';
-import IconButton from "@material-ui/core/IconButton";
-import LogoutIcon from "@material-ui/icons/ExitToApp";
-import {Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const REACT_APP_OSRM_URL = process.env.REACT_APP_OSRM_URL;
 const REACT_APP_MAPBOX_URL = process.env.REACT_APP_MAPBOX_URL;
@@ -32,7 +30,7 @@ function Redirect({to}) {
     return null;
 }
 
-class ZonePreview extends React.Component {
+class ZonePreview extends Component {
 
     zones = [];
 
@@ -100,7 +98,7 @@ class ZonePreview extends React.Component {
                 }).addTo(this.state.map)
                 this.state.map.fitBounds(zoneGeofence.getBounds(), {
                     maxZoom: 16,
-                    padding: [0,50]
+                    padding: [0, 50]
                 });
             }
         });
@@ -300,7 +298,7 @@ class ZonePreview extends React.Component {
                     chc.setAttribute("checked", "checked");
                     map.fitBounds(zoneInMinimap.getBounds(), {
                         maxZoom: 16,
-                        padding: [0,50]
+                        padding: [0, 50]
                     });
                     handleSidebarChange(id);
                 });
@@ -389,7 +387,7 @@ class ZonePreview extends React.Component {
                         }
                         zoneGeofence[++i] = new L.geoJSON(geojsonFeatures);
                         zoneGeofence[i].addTo(map)
-                        this.GetTimeSeries(polygon, zoneGeofence[i]);
+                        this.getTimeSeries(polygon, zoneGeofence[i]);
                         // this.setState({selectedPolygon: polygon});
                         // this.setState({selectedZoneGeofence: zoneGeofence});
                         bef = selectedZones.slice(0)
@@ -435,26 +433,10 @@ class ZonePreview extends React.Component {
         this.callImageryFunction();
     };
 
-    handleDateChange = val =>{
+    handleDateChange = val => {
         this.setState({selectedTime: val});
         this.callImageryFunction();
     }
-
-    // handleChangeZone = () => {
-    //     let searchValue = .target.value;
-    //     let sidebarRows = document.getElementById('sidebarZones');
-    //
-    //     console.log("handleChangeZOne");
-    //     if(searchValue.length == 1){
-    //
-    //         this.state.tableRows = sidebarRows.children;;
-    //         console.log(1);
-    //         // console.log(tableRows);
-    //     }
-    //     if(searchValue.length == 0){
-    //         console.log(0);
-    //     }
-    // }
 
     handleSearchChange(event) {
         let searchValue = event.target.value;
@@ -482,7 +464,7 @@ class ZonePreview extends React.Component {
         }
     }
 
-    GetTimeSeries(polygon, zoneGeofence) {
+    getTimeSeries(polygon, zoneGeofence) {
         let timeSeries = []
         let bboxCoords = zoneGeofence.getBounds();
         let bboxText = bboxCoords._southWest.lng + "," + bboxCoords._southWest.lat + "," + bboxCoords._northEast.lng + "," + bboxCoords._northEast.lat;
@@ -524,67 +506,20 @@ class ZonePreview extends React.Component {
                     "geometry": wktgeomZone
                 }
                 let zoneGeofence = L.geoJSON(geojsonFeatures);
-                this.GetTimeSeries(polygon, zoneGeofence)
+                this.getTimeSeries(polygon, zoneGeofence)
             }
         });
     }
-    // When select polygon
-    // var i = 0;
-    // setTimeout(() => {
-    //     zones.forEach((polygon) => {
-    //         i++;
-    //         console.log("i: "+polygon.geometry)
-    //
-    //         let wktgeomZone = wkt.parse(polygon.geometry);
-    //         var geojsonFeatures = {
-    //             "type": "Feature",
-    //             "properties": {'name': polygon.name},
-    //             "geometry": wktgeomZone
-    //         }
-    //         var zoneGeofence = L.geoJSON(geojsonFeatures);
-    //         GetTimeSeries(polygon, zoneGeofence);
-    //         this.setTimeSeries(timeSeries);
-    //         this.setState({selectedPolygon: polygon});
-    //         this.setState({selectedZoneGeofence: zoneGeofence});
-    //     });
-    // }, 1000);
-
-
 
     render() {
-        const {timeSeriesFromMap, dateState, setDateState} = this.state;
-        // const {dateState, setDateState} = useState(new Date());
-        //    const { isBackdropOpen } = this.state;
-        // const sendDataToParent = (layer) => { // the callback. Use a better name
-        //     console.log(this.state.geofenceLayer);
-        //     this.state.geofenceLayer = layer;
-        //     console.log('sendDataToParent accepted');
-        // console.log(this.state.userZones);
-        // };
-        // const [startDate, setStartDate] = useState(new Date());
-        const changeDate = (e) => {
-            setDateState(e)
-        }
-        const tileDisabled = ({activeStartDate, date, view}) => {
+        const {timeSeriesFromMap} = this.state;
+
+        const tileDisabled = (date) => {
             return date < new Date()
         }
 
-        // const events = [
-        //
-        //     {
-        //         "start": "todayStr",
-        //         "end": "oneYrAgoStr"
-        //     }
-        // ];
-        // // let today = new Date();
         let oneYrAgo = new Date();
         oneYrAgo.setFullYear(oneYrAgo.getFullYear() - 1);
-        // let oneYrAgoStr =Moment(oneYrAgo).format('YYYY-MM-DD');
-        // const disabledDateRanges = events.map(range => ({
-        //
-        //     start: new Date(1970,1,1),
-        //     end: new Date()
-        // }));
 
         const handleLogout = (e) => {
             request.auth.logout();
@@ -599,16 +534,16 @@ class ZonePreview extends React.Component {
                         <FormControl className={"observationForm"}>
                             {/*<InputLabel>Layers</InputLabel>*/}
                             <Select onChange={this.handleSelectChange} value={this.state.selectVal}>
-                                <MenuItem value="AGRICULTURE">Agriculture</MenuItem >
-                                <MenuItem value="BATHYMETRIC">Bathymetric</MenuItem >
-                                <MenuItem value="FALSE-COLOR-URBAN">False color (urban)</MenuItem >
-                                <MenuItem value="FALSE-COLOR">False color (vegetation)</MenuItem >
-                                <MenuItem value="GEOLOGY">Geology</MenuItem >
-                                <MenuItem value="MOISTURE-INDEX">Moisture Index</MenuItem >
-                                <MenuItem value="NATURAL-COLOR">Natural color (true color)</MenuItem >
-                                <MenuItem value="NDVI">NDVI</MenuItem >
-                                <MenuItem value="SWIR">SWIR</MenuItem >
-                                <MenuItem value="TRUE-COLOR-S2L2A">TRUE COLOR S2L2A</MenuItem >
+                                <MenuItem value="AGRICULTURE">Agriculture</MenuItem>
+                                <MenuItem value="BATHYMETRIC">Bathymetric</MenuItem>
+                                <MenuItem value="FALSE-COLOR-URBAN">False color (urban)</MenuItem>
+                                <MenuItem value="FALSE-COLOR">False color (vegetation)</MenuItem>
+                                <MenuItem value="GEOLOGY">Geology</MenuItem>
+                                <MenuItem value="MOISTURE-INDEX">Moisture Index</MenuItem>
+                                <MenuItem value="NATURAL-COLOR">Natural color (true color)</MenuItem>
+                                <MenuItem value="NDVI">NDVI</MenuItem>
+                                <MenuItem value="SWIR">SWIR</MenuItem>
+                                <MenuItem value="TRUE-COLOR-S2L2A">TRUE COLOR S2L2A</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl className={"observationForm"}>
@@ -646,8 +581,14 @@ class ZonePreview extends React.Component {
                         {request.auth.isAuthenticated() && (
                             <label aria-label="Logout"
 
-                                        style={{cursor: 'pointer', marginLeft: "auto", marginRight: "10px", fontFamily: "Roboto", fontWeight: 500}}
-                                        onClick={handleLogout}>
+                                   style={{
+                                       cursor: 'pointer',
+                                       marginLeft: "auto",
+                                       marginRight: "10px",
+                                       fontFamily: "Roboto",
+                                       fontWeight: 500
+                                   }}
+                                   onClick={handleLogout}>
                                 Logout
                             </label>
 
@@ -687,7 +628,7 @@ class ZonePreview extends React.Component {
                                 {/*<Button variant="outlined" onClick={() => {*/}
                                 {/*    this.callImageryFunction(this.state.value);*/}
                                 {/*}}> Apply </Button>*/}
-                                <h1 style = {{ marginTop: 0 }}>© GPS.AZ</h1>
+                                <h1 style={{marginTop: 0}}>© GPS.AZ</h1>
                             </div>
                         </div>
                     </div>

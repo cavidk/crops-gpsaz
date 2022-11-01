@@ -71,7 +71,7 @@ class SignUp extends Component {
             password: this.state.password || undefined,
         }
 
-        request.singup('users', user, (err, res) => {
+        request.signup('users', user, (err, res) => {
             if (err) {
                 this.setState({userCreatedAndSaved: false})
                 // console.log(err)
