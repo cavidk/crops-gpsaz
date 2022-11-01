@@ -1,0 +1,195 @@
+.observationLabel {
+    display: inline-block;
+    height: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    top: 32px;
+    left: 8px;
+    background-color: #0096ff;
+    color: #fff;
+}
+
+.observationClass {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    z-index: 10;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+}
+
+.mapBody {
+    position: relative;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: calc(100%);
+}
+
+.mapBody #map {
+    height: 100% !important;
+}
+
+.observationForm {
+    border-right: 1px solid blue !important;
+    min-width: 100px !important;
+    padding-left: 7px;
+    padding-right: 10px !important;
+}
+
+.observationForm input {
+    background-color: transparent !important;
+    border: 0px solid !important;
+    height: 20px !important;
+    color: #CCC !important;
+}
+
+.observationForm input:focus-visible, .observationForm input:active {
+    outline: none;
+}
+
+.observationForm div {
+    font-size: 13px;
+}
+
+.react-date-picker__calendar {
+    z-index: 999 !important;
+}
+
+.observationClass .MuiInput-underline:before {
+    border: none !important;
+}
+
+.react-date-picker__wrapper {
+    border: none !important;
+}
+
+.MuiSelect-select.MuiSelect-select {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+    min-width: 100px !important;
+}
+
+.Login-card-1 {
+    max-width: max-content;
+}
+
+.MuiButton-outlinedPrimary {
+    background-color: #42a95e !important;
+    color: white !important;
+}
+
+.MuiMenu-list option {
+    cursor: pointer;
+}
+
+.leaflet-sidebar-right {
+    right: 0;
+    /*left: 6px;*/
+}
+
+@media (min-width: 0px) {
+    .MuiBox-root.MuiBox-root-1 {
+        display: block !important;
+    }
+}
+
+.temp-class {
+    display: flex;
+}
+
+.leaflet-sidebar-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0px;
+}
+
+.leaflet-sidebar.leaflet-touch {
+    border: none;
+}
+
+.leaflet-sidebar-right .leaflet-sidebar-tabs {
+    background: transparent;
+    left: -2px;
+    border-right: 2px solid white;
+    margin-right: 20px;
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+}
+
+.leaflet-sidebar.collapsed {
+    width: 40px;
+    height: 100%;
+}
+
+.leaflet-sidebar-right .leaflet-sidebar-content {
+    height: 100%;
+    left: 42px;
+    right: 0;
+}
+
+
+.searchbox {
+    border: 1px solid rgb(10 10 10 / 26%);
+    border-radius: 5px;
+    padding: 8px 12px;
+    display: block;
+    width: 89%;
+    height: 3vh;
+}
+
+@media (min-width: 1200px) {
+    .leaflet-sidebar {
+        width: 400px !important;
+        max-width: 400px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .leaflet-sidebar-right ~ .leaflet-control-container .leaflet-right {
+        right: 355px !important;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .leaflet-sidebar-right ~ .leaflet-control-container .leaflet-right {
+        right: 345px !important;
+    }
+}
+
+.leaflet-sidebar.collapsed {
+    width: 40px !important;
+    height: 100% !important;
+}
+
+#sidebar{
+    height: calc(100% - 26px)
+}
+
+#sidebar .sidebar-tab{
+    height: calc(100% - 80px)
+}
+
+.MuiSlider-root {
+    padding: 2px 0 !important;
+}
+
+.cloudCoverageClass{
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.sidebarContentBody{
+    height: calc(100% - 124px);
+}
