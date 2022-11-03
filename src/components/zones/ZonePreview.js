@@ -2,16 +2,21 @@ import React, {Component, useEffect} from 'react';
 import {FormControl, Select, MenuItem} from '@material-ui/core';
 import {withRouter} from '../map/withRouter';
 import DatePicker, {registerLocale} from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "./css/zone-preview.css";
-import az from 'date-fns/locale/az';
-import * as L from "leaflet";
 import wkt from "wkt";
 import GeometryUtil from "leaflet-geometryutil";
 import Moment from "moment/moment";
 import Box from '@material-ui/core/Box';
 import Slider from '@material-ui/core/Slider';
 import {useNavigate} from "react-router-dom";
+import "react-datepicker/dist/react-datepicker.css";
+import "./css/zone-preview.css";
+import * as L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-sidebar-v2";
+import "leaflet-draw";
+import "../map/css/leaflet-sidebar.css";
+import "../map/css/leaflet-sidebar.min.css";
+import az from 'date-fns/locale/az';
 
 const REACT_APP_OSRM_URL = process.env.REACT_APP_OSRM_URL;
 const REACT_APP_MAPBOX_URL = process.env.REACT_APP_MAPBOX_URL;
@@ -33,6 +38,8 @@ function Redirect({to}) {
 class ZonePreview extends Component {
 
     zones = [];
+    overlays = [];
+    selTime = null;
 
     constructor(props) {
         super(props);
@@ -60,20 +67,35 @@ class ZonePreview extends Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
-    getSentinelService(layerName = "NDVI") {
-        this.callApiSelectedTimeSelected(layerName);
+    getSentinelService() {
+        this.callApiSelectedTimeSelected(this.state.selectedTime);
     }
 
-    callApiSelectedTimeSelected(layerName) {
+    callApiSelectedTimeSelected(date) {
+        let layerName = this.state.selectVal;
         let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
-        let date = this.state.selectedTime;
+        let _date = date;
         if (this.sentinelHubLayer != null) {
             this.state.map.removeLayer(this.sentinelHubLayer);
         }
-        let dateFrom = Moment(date).subtract(5, 'd').format('YYYY-MM-DD');
-        let dateTo = Moment(date).format('YYYY-MM-DD');
+        let dateFrom = Moment(_date).subtract(5, 'd').format('YYYY-MM-DD');
+        let dateTo = Moment(_date).format('YYYY-MM-DD');
         let time = dateFrom + "/" + dateTo;
         this.zones.map((polygon) => {
+            //
+            // OpenStreetMap
+            let osm = L.tileLayer(REACT_APP_OSRM_URL, {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            });
+            //GoogleSatellite
+            let gst = L.tileLayer(REACT_APP_GOOGLESAT_URL, {
+                attribution: '&copy; <a href="http://osm.org/copyright">GoogleSatelliteMap</a> contributors'
+            });
+            let baseMaps = {
+                OpenStreetMap: osm,
+                GoogleSat: gst
+            };
+            //
             if (this.state.selectedZones.includes(polygon.id)) {
                 let wktgeomZone = wkt.parse(polygon.geometry);
                 let geojsonFeatures = {
@@ -84,18 +106,23 @@ class ZonePreview extends Component {
                 let zoneGeofence = L.geoJSON(geojsonFeatures);
                 this.sentinelHubLayer = L.tileLayer.wms(baseUrl, {
                     attribution: '&copy; <a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
+                    urlProcessingApi:"https://services.sentinel-hub.com/ogc/wms/1d4de4a3-2f50-493c-abd8-861dec3ae6b2",
                     layers: layerName,
-                    tileSize: 512,
-                    maxcc: 50,
+                    // preset: layerName,
+                    maxcc: 20,
                     time: time,
                     gain: '0.3',
                     gamma: '0.8',
-                    transparent: 'true',
+                    transparent: true,
                     format: 'image/png',
                     crs: L.CRS.EPSG4326,
-                    geometry: polygon.geometry,
-                    filter: "eo:cloud_cover > 10"
-                }).addTo(this.state.map)
+                    geometry: polygon.geometry
+                }).addTo(this.state.map).bringToFront();
+                // let overlayMaps = {
+                //     'Sentinel Hub WMS': this.sentinelHubLayer
+                // }
+                // console.log(this.state.map.layers())
+                // L.control.layers(baseMaps, overlayMaps).addTo(this.state.map)
                 this.state.map.fitBounds(zoneGeofence.getBounds(), {
                     maxZoom: 16,
                     padding: [0, 50]
@@ -115,21 +142,41 @@ class ZonePreview extends Component {
         this.setState({timeSeriesFromMap: dateArray})
     }
 
+    setSelectedTime = (date) => {
+        this.setState({selectedTime: Date(date)});
+    }
 
-    callImageryFunction = () => {
-        this.getSentinelService(this.state.selectVal);
+    callImageryFunction = (layerName) => {
+        this.getSentinelService(layerName);
     };
 
     componentDidMount() {
         this.fetchData();
         const {router} = this.props;
+
+        // OpenStreetMap
+        let osm = L.tileLayer(REACT_APP_OSRM_URL, {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        });
+        //GoogleSatellite
+        let gst = L.tileLayer(REACT_APP_GOOGLESAT_URL, {
+            attribution: '&copy; <a href="http://osm.org/copyright">GoogleSatelliteMap</a> contributors'
+        });
         const map = L.map("map", {
             renderer: L.canvas(),
             center: [40.175362, 48.815538],
             zoom: 8,
             attributionControl: false,
-            layers: [L.tileLayer(REACT_APP_OSRM_URL)]
+            layers: [osm, gst]
         });
+
+        let baseMaps = {
+            OpenStreetMap: osm,
+            GoogleSat: gst
+        };
+
+        L.control.layers(baseMaps).addTo(map);
+
         this.setState({map: map});
         const sidebar = L.control
             .sidebar({
@@ -189,75 +236,13 @@ class ZonePreview extends Component {
             // }
         }
 
-        // map.addLayer(this.editableLayers);
-        // this.map.addLayer(this.props.valueFromParent);
-        // const rectangle = [[51.49, -0.08], [51.5, -0.06]];
-
-        let mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-        let mbUrl = REACT_APP_MAPBOX_URL;
-
-        let grayscale = L.tileLayer(mbUrl, {
-            id: "mapbox/light-v9", tileSize: 512, zoomOffset: -1
-            // ,
-            // attribution: mbAttr
-        });
-        let streets = L.tileLayer(mbUrl, {
-            id: "mapbox/streets-v11", tileSize: 512, zoomOffset: -1
-            // ,
-            // attribution: mbAttr
-        });
-
-        let topographic = L.tileLayer(REACT_APP_OSRM_URL, {
-            id: "Topographic", tileSize: 512, zoomOffset: -1
-            // ,
-            // attribution: mbAttr
-        });
-
-        let googleSatt = L.tileLayer(REACT_APP_GOOGLESAT_URL, {
-            id: "Google Satallite", tileSize: 512, zoomOffset: -1
-            // ,
-            // attribution: mbAttr
-        });
-
-
-        let baseLayers = {
-            OpenStreetMap: streets,
-            Grayscale: grayscale,
-            Topographic: topographic,
-            GoogleSat: googleSatt
-        };
-
-        // var options = {
-        //     position: "topright", draw: {
-        //         polygon: {
-        //             title: "Draw a beautiful polygon!", allowIntersection: false, drawError: {
-        //                 drawError: {
-        //                     color: "#b00b00", timeout: 1000
-        //                 }, shapeOptions: {
-        //                     color: "#bada55"
-        //                 }, showArea: true
-        //             }, polyline: false, rectangle: false, circle: false, marker: false
-        //         }, edit: {
-        //             featureGroup: this.editableLayers, //REQUIRED!!
-        //             remove: false
-        //         }
-        //     }
-        // }
-        // L.control.layers(baseLayers).addTo(map);
-
-        // this.drawControl = new L.Control.Draw(options);
-        // map.on("draw:created", function (e) {
-        //     var layer = e.layer;
-        //     // Do whatever else you need to. (save to db, add to map etc)
-        // });
-
         // let zoneLayer = L.geoJSON().addTo(this.map);
         const sidebarlist = document.getElementById("sidebarZones");
 
 
         function createSidebarElements(wktGeom, boundsZone, geometry, id, name, description, areaHa) {
             let htmlId = 'fieldmap' + id;
-            const el = `<div class="zoneTableRow" name="${name}" desc="${description}" area="${areaHa}">
+            const el = `<div class="zoneTableRow">
                             <div  class="fieldMiniMap" id=${htmlId}></div>
                             <div class="zoneDescriptionDiv">
                             <div class="zoneDescriptionTxt">
@@ -277,11 +262,13 @@ class ZonePreview extends Component {
             chc.setAttribute("name", "zone");
             chc.value = id;
 
-            // console.log(el);
             temp.setAttribute("class", "temp-class");
+            temp.setAttribute("detail", name);
+            temp.setAttribute("desc", description);
+            temp.setAttribute("area", areaHa);
+
             temp.innerHTML = el.trim();
             temp.append(chc);
-            // console.log(temp.lastElementChild)
             let added = sidebarlist.insertAdjacentElement("beforeend", temp);
             if (added) {
                 let zoneInMinimap = L.geoJSON(wktGeom);
@@ -361,6 +348,7 @@ class ZonePreview extends Component {
 
                 let areaHa = GeometryUtil.geodesicArea(coordsLatLng) / 10000;
                 areaHa = Number(areaHa).toFixed(3);
+
                 createSidebarElements(wktgeomZone, zoneGeofence.getBounds(), polygon.geometry, polygon.id, polygon.name, polygon.description, areaHa);
             });
             this.state.zoneTableRows = Array.from(sidebarlist.children);//for search
@@ -370,11 +358,15 @@ class ZonePreview extends Component {
         let zoneGeofence = [];
         let i = 0;
         setInterval(() => {
+            if(this.selTime != null){
+                // this.setSelectedTime(this.selTime);
+                this.selTime = null;
+            }
             if (bef[0] != selectedZones[0]) {
                 // if (bef.length != selectedZones.length) {
                 // map.removeLayer(zoneGeofence);
-                zoneGeofence.map(zonee => {
-                    map.removeLayer(zonee);
+                zoneGeofence.map(_zone => {
+                    map.removeLayer(_zone);
                 });
                 this.zones.map((polygon) => {
                     if (selectedZones.includes(polygon.id)) {
@@ -392,7 +384,6 @@ class ZonePreview extends Component {
                         // this.setState({selectedZoneGeofence: zoneGeofence});
                         bef = selectedZones.slice(0)
                         // bef[0] = selectedZones[0]
-                        // console.log("geo: ", zoneGeofence)
 
                     }
                 })
@@ -430,12 +421,12 @@ class ZonePreview extends Component {
 
     handleSelectChange = (event) => {
         this.setState({selectVal: event.target.value});
-        this.callImageryFunction();
+        this.callImageryFunction(event.target.value);
     };
 
     handleDateChange = val => {
         this.setState({selectedTime: val});
-        this.callImageryFunction();
+        this.callImageryFunction(this.state.selectVal);
     }
 
     handleSearchChange(event) {
@@ -444,11 +435,10 @@ class ZonePreview extends Component {
 
         let allChilds = [];
         allChilds = this.state.zoneTableRows;
-
         if (searchValue.length > 0) {
             sidebarRows.innerText = '';
             allChilds.forEach((child: HTMLDivElement) => {
-                let zoneName = child.getAttribute("name").toLowerCase();
+                let zoneName = child.getAttribute("detail").toLowerCase();
                 let desc = child.getAttribute("desc").toLowerCase();
                 let area = child.getAttribute("area").toLowerCase();
                 if (zoneName.includes(searchValue.toLowerCase()) || desc.includes(searchValue.toLowerCase()) || area.includes(searchValue.toLowerCase())) {
@@ -483,9 +473,10 @@ class ZonePreview extends Component {
                     timeSeries.push(timeSeriesJson.features[key]);
                 });
             }
-            // if (timeSeries.length > 0) {
-            //     callApiSelectedTime(polygon, zoneGeofence, "NDVI", timeSeries[0]);
-            // }
+            this.selTime = timeSeries[0];
+            if (timeSeries.length > 0) {
+                this.callApiSelectedTimeSelected(timeSeries[0]);
+            }
         })
         this.setTimeSeries(timeSeries);
     }
@@ -534,16 +525,12 @@ class ZonePreview extends Component {
                         <FormControl className={"observationForm"}>
                             {/*<InputLabel>Layers</InputLabel>*/}
                             <Select onChange={this.handleSelectChange} value={this.state.selectVal}>
-                                <MenuItem value="AGRICULTURE">Agriculture</MenuItem>
-                                <MenuItem value="BATHYMETRIC">Bathymetric</MenuItem>
-                                <MenuItem value="FALSE-COLOR-URBAN">False color (urban)</MenuItem>
-                                <MenuItem value="FALSE-COLOR">False color (vegetation)</MenuItem>
-                                <MenuItem value="GEOLOGY">Geology</MenuItem>
-                                <MenuItem value="MOISTURE-INDEX">Moisture Index</MenuItem>
-                                <MenuItem value="NATURAL-COLOR">Natural color (true color)</MenuItem>
-                                <MenuItem value="NDVI">NDVI</MenuItem>
-                                <MenuItem value="SWIR">SWIR</MenuItem>
-                                <MenuItem value="TRUE-COLOR-S2L2A">TRUE COLOR S2L2A</MenuItem>
+                                <MenuItem value="NDVI">Green Vegetation</MenuItem>
+                                <MenuItem value="MOISTURE_INDEX">Moisture Index</MenuItem>
+                                <MenuItem value="TRUE_COLOR">Normal Image</MenuItem>
+                                <MenuItem value="SAVI">Soil Abj. Vegetation Index</MenuItem>
+                                <MenuItem value="SWIR">Water in Plants</MenuItem>
+                                <MenuItem value="NDWI">Water Index</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl className={"observationForm"}>
@@ -580,7 +567,6 @@ class ZonePreview extends Component {
                         <div></div>
                         {request.auth.isAuthenticated() && (
                             <label aria-label="Logout"
-
                                    style={{
                                        cursor: 'pointer',
                                        marginLeft: "auto",
@@ -625,10 +611,7 @@ class ZonePreview extends Component {
                                 </div>
                             </div>
                             <div className="leaflet-sidebar-footer">
-                                {/*<Button variant="outlined" onClick={() => {*/}
-                                {/*    this.callImageryFunction(this.state.value);*/}
-                                {/*}}> Apply </Button>*/}
-                                <h1 style={{marginTop: 0}}>© GPS.AZ</h1>
+                                <img src={require('./logo140.png')}/>
                             </div>
                         </div>
                     </div>

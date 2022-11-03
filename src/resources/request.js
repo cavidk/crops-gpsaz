@@ -1,8 +1,9 @@
 import user from "../models/user";
 const request = require('superagent');
-
-const  REACT_APP_API_BASE_URL = process.env.ENVIRONMENT === 'local' ? process.env.REACT_APP_API_BASE_URL :    'http://127.0.0.1:8080/api/';
-
+// console.log("Env: ", process.env.ENVIRONMENT)
+// const  REACT_APP_API_BASE_URL = process.env.ENVIRONMENT === 'local' ? process.env.REACT_APP_API_BASE_URL :    'http://127.0.0.1:8080/api/';
+const  REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL ||
+    'http://127.0.0.1:8080/api/';
 const login = (user, callback) => {
     request.post(REACT_APP_API_BASE_URL  + 'login')
             .set('Content-Type', 'application/json')
@@ -93,8 +94,8 @@ const auth = {
 
         const jwtPayload = JSON.parse(atob(token.split('.')[1]));
         //console.log(`The parse JWT is:  ${jwtPayload.sub}`);
-        
-        return jwtPayload;  
+
+        return jwtPayload;
     },
     getSubject(){
         const jwtPayload = this.decodeJWT(JSON.parse(sessionStorage.getItem('jwt')))

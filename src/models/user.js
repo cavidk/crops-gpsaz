@@ -33,7 +33,11 @@ class User {
      * @return {boolean}
      */
     isLoggedIn() {
-        return Boolean(this.loggedIn) === true
+        if(sessionStorage.getItem('jwt')){
+            return Boolean(this.loggedIn) === true
+        }else{
+            return false;
+        }
     }
 
     /**

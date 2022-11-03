@@ -2,7 +2,6 @@ import React, {Component, useEffect} from 'react'
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom'
 import Header from './components/header/Header'
 import Login from './components/login/Login'
-import Welcome from './components/welcome/Welcome'
 import ZonePreview from './components/zones/ZonePreview'
 import user from "./models/user";
 const APP_CONSTANTS = require('./ApplicationConstants');

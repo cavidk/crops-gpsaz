@@ -177,7 +177,7 @@
 .sideBarZones{
     height: 100%;
     overflow-y: scroll;
-    border-bottom : 1px solid #000000;
+    border-bottom : none;
 
 }
 
@@ -288,14 +288,14 @@
 }
 .sidebar.leaflet-touch {
     box-shadow: none;
-    border-right: 2px solid rgba(0, 0, 0, 0.2);
+    border-left: 2px solid rgba(0, 0, 0, 0.2);
 }
 @media (min-width: 768px) {
     .sidebar {
         border-radius: 4px;
     }
     .sidebar.leaflet-touch {
-        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-left: 2px solid rgba(0, 0, 0, 0.2);
     }
 }
 
