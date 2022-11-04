@@ -7,6 +7,7 @@ import GeometryUtil from "leaflet-geometryutil";
 import Moment from "moment/moment";
 import Box from '@material-ui/core/Box';
 import Slider from '@material-ui/core/Slider';
+import Loader from '@material-ui/core/CircularProgress';
 import {useNavigate} from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import "./css/zone-preview.css";
@@ -38,7 +39,6 @@ function Redirect({to}) {
 class ZonePreview extends Component {
 
     zones = [];
-    overlays = [];
     selTime = null;
 
     constructor(props) {
@@ -59,7 +59,7 @@ class ZonePreview extends Component {
             selectedTime: new Date(),
             map: "",
             selectedZones: [],
-            cloudCoverage: 75,
+            cloudCoverage: 25,
             logoutClick: false,
         };
         this.setTimeSeries = this.setTimeSeries.bind(this);
@@ -67,12 +67,7 @@ class ZonePreview extends Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
-    getSentinelService() {
-        this.callApiSelectedTimeSelected(this.state.selectedTime);
-    }
-
-    callApiSelectedTimeSelected(date) {
-        let layerName = this.state.selectVal;
+    callApiSelectedTimeSelected(layer, date) {
         let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
         let _date = date;
         if (this.sentinelHubLayer != null) {
@@ -81,22 +76,12 @@ class ZonePreview extends Component {
         let dateFrom = Moment(_date).subtract(5, 'd').format('YYYY-MM-DD');
         let dateTo = Moment(_date).format('YYYY-MM-DD');
         let time = dateFrom + "/" + dateTo;
+        // console.log("Date: ", time);
+        // console.log("Layer: ", layer);
         this.zones.map((polygon) => {
-            //
-            // OpenStreetMap
-            let osm = L.tileLayer(REACT_APP_OSRM_URL, {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            });
-            //GoogleSatellite
-            let gst = L.tileLayer(REACT_APP_GOOGLESAT_URL, {
-                attribution: '&copy; <a href="http://osm.org/copyright">GoogleSatelliteMap</a> contributors'
-            });
-            let baseMaps = {
-                OpenStreetMap: osm,
-                GoogleSat: gst
-            };
-            //
             if (this.state.selectedZones.includes(polygon.id)) {
+                let element = document.getElementById("sidebarElementChild" + polygon.id);
+                element.setAttribute("style", "display:block");
                 let wktgeomZone = wkt.parse(polygon.geometry);
                 let geojsonFeatures = {
                     "type": "Feature",
@@ -106,11 +91,12 @@ class ZonePreview extends Component {
                 let zoneGeofence = L.geoJSON(geojsonFeatures);
                 this.sentinelHubLayer = L.tileLayer.wms(baseUrl, {
                     attribution: '&copy; <a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
-                    urlProcessingApi:"https://services.sentinel-hub.com/ogc/wms/1d4de4a3-2f50-493c-abd8-861dec3ae6b2",
-                    layers: layerName,
+                    // urlProcessingApi:"https://services.sentinel-hub.com/ogc/wms/1d4de4a3-2f50-493c-abd8-861dec3ae6b2",
+                    layers: layer,
+                    tileSize: 512,
                     // preset: layerName,
                     maxcc: 20,
-                    time: time,
+                    time: Moment(_date).format('YYYY-MM-DD'),
                     gain: '0.3',
                     gamma: '0.8',
                     transparent: true,
@@ -118,15 +104,14 @@ class ZonePreview extends Component {
                     crs: L.CRS.EPSG4326,
                     geometry: polygon.geometry
                 }).addTo(this.state.map).bringToFront();
-                // let overlayMaps = {
-                //     'Sentinel Hub WMS': this.sentinelHubLayer
-                // }
-                // console.log(this.state.map.layers())
-                // L.control.layers(baseMaps, overlayMaps).addTo(this.state.map)
+
                 this.state.map.fitBounds(zoneGeofence.getBounds(), {
                     maxZoom: 16,
                     padding: [0, 50]
                 });
+                this.sentinelHubLayer.on('load', function(){
+                    element.setAttribute("style", "display:none");
+                })
             }
         });
     }
@@ -142,18 +127,13 @@ class ZonePreview extends Component {
         this.setState({timeSeriesFromMap: dateArray})
     }
 
-    setSelectedTime = (date) => {
-        this.setState({selectedTime: Date(date)});
-    }
-
     callImageryFunction = (layerName) => {
-        this.getSentinelService(layerName);
+        this.callApiSelectedTimeSelected(layerName, this.state.selectedTime);
     };
 
-    componentDidMount() {
+    componentDidMount(elementId) {
         this.fetchData();
         const {router} = this.props;
-
         // OpenStreetMap
         let osm = L.tileLayer(REACT_APP_OSRM_URL, {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -169,14 +149,13 @@ class ZonePreview extends Component {
             attributionControl: false,
             layers: [osm, gst]
         });
-
+        //
         let baseMaps = {
             OpenStreetMap: osm,
             GoogleSat: gst
         };
-
+        //
         L.control.layers(baseMaps).addTo(map);
-
         this.setState({map: map});
         const sidebar = L.control
             .sidebar({
@@ -243,6 +222,7 @@ class ZonePreview extends Component {
         function createSidebarElements(wktGeom, boundsZone, geometry, id, name, description, areaHa) {
             let htmlId = 'fieldmap' + id;
             const el = `<div class="zoneTableRow">
+                            <div class="lds-dual-ring" id="sidebarElementChild${id}"></div>
                             <div  class="fieldMiniMap" id=${htmlId}></div>
                             <div class="zoneDescriptionDiv">
                             <div class="zoneDescriptionTxt">
@@ -266,6 +246,7 @@ class ZonePreview extends Component {
             temp.setAttribute("detail", name);
             temp.setAttribute("desc", description);
             temp.setAttribute("area", areaHa);
+            temp.setAttribute("id", "sidebarElement" + id);
 
             temp.innerHTML = el.trim();
             temp.append(chc);
@@ -288,6 +269,8 @@ class ZonePreview extends Component {
                         padding: [0, 50]
                     });
                     handleSidebarChange(id);
+                    let element = document.getElementById("sidebarElementChild" + id);
+                    element.setAttribute("style", "display:block");
                 });
 
                 const mini_map_init = L.map(htmlId, {
@@ -359,7 +342,6 @@ class ZonePreview extends Component {
         let i = 0;
         setInterval(() => {
             if(this.selTime != null){
-                // this.setSelectedTime(this.selTime);
                 this.selTime = null;
             }
             if (bef[0] != selectedZones[0]) {
@@ -384,7 +366,6 @@ class ZonePreview extends Component {
                         // this.setState({selectedZoneGeofence: zoneGeofence});
                         bef = selectedZones.slice(0)
                         // bef[0] = selectedZones[0]
-
                     }
                 })
             }
@@ -421,12 +402,12 @@ class ZonePreview extends Component {
 
     handleSelectChange = (event) => {
         this.setState({selectVal: event.target.value});
-        this.callImageryFunction(event.target.value);
+        this.callApiSelectedTimeSelected(event.target.value, this.state.selectedTime);
     };
 
     handleDateChange = val => {
         this.setState({selectedTime: val});
-        this.callImageryFunction(this.state.selectVal);
+        this.callApiSelectedTimeSelected(this.state.selectVal, val);
     }
 
     handleSearchChange(event) {
@@ -475,7 +456,7 @@ class ZonePreview extends Component {
             }
             this.selTime = timeSeries[0];
             if (timeSeries.length > 0) {
-                this.callApiSelectedTimeSelected(timeSeries[0]);
+                this.callApiSelectedTimeSelected(this.state.selectVal, timeSeries[0]);
             }
         })
         this.setTimeSeries(timeSeries);

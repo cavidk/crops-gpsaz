@@ -182,7 +182,7 @@
 }
 
 .zoneTableRow {
-    /*position: absolute;*/
+    position: relative;
     width: 90%;
     height: 15vh;
     border-bottom : 1px solid #000000;

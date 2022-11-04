@@ -19,7 +19,7 @@ class User {
      * @param callback function
      */
     authenticated(data) {
-        console.log(data);
+        // console.log(data);
         // localStorage.setItem('userId', data.id)
         // localStorage.setItem('userName', data.name)
         // localStorage.setItem('userEmail', data.email)
