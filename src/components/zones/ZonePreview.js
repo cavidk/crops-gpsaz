@@ -1,5 +1,5 @@
 import React, {Component, useEffect} from 'react';
-import {FormControl, Select, MenuItem} from '@material-ui/core';
+import {FormControl, MenuItem, Select} from '@material-ui/core';
 import {withRouter} from '../map/withRouter';
 import DatePicker, {registerLocale} from "react-datepicker";
 import wkt from "wkt";
@@ -7,7 +7,6 @@ import GeometryUtil from "leaflet-geometryutil";
 import Moment from "moment/moment";
 import Box from '@material-ui/core/Box';
 import Slider from '@material-ui/core/Slider';
-import Loader from '@material-ui/core/CircularProgress';
 import {useNavigate} from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import "./css/zone-preview.css";
@@ -109,7 +108,7 @@ class ZonePreview extends Component {
                     maxZoom: 16,
                     padding: [0, 50]
                 });
-                this.sentinelHubLayer.on('load', function(){
+                this.sentinelHubLayer.on('load', function () {
                     element.setAttribute("style", "display:none");
                 })
             }
@@ -157,6 +156,15 @@ class ZonePreview extends Component {
         //
         L.control.layers(baseMaps).addTo(map);
         this.setState({map: map});
+
+
+        map.on("zoomstart", function (e) {
+            if (selectedZones.length > 0) {
+                let element = document.getElementById("sidebarElementChild" + selectedZones[0]);
+                element.setAttribute("style", "display:block");
+            }
+        });
+
         const sidebar = L.control
             .sidebar({
                 autopan: false, position: "right", container: "sidebar", closeButton: true
@@ -203,8 +211,12 @@ class ZonePreview extends Component {
         let bef = [];
 
         function handleSidebarChange(id) {
-            selectedZones = [];
-            selectedZones.push(id);
+            if (!selectedZones.includes(id)) {
+                selectedZones = [];
+                selectedZones.push(id);
+                let element = document.getElementById("sidebarElementChild" + id);
+                element.setAttribute("style", "display:block");
+            }
             // if (selectedZones.includes(id)) {
             //     const index = selectedZones.indexOf(id);
             //     if (index > -1) {
@@ -269,8 +281,6 @@ class ZonePreview extends Component {
                         padding: [0, 50]
                     });
                     handleSidebarChange(id);
-                    let element = document.getElementById("sidebarElementChild" + id);
-                    element.setAttribute("style", "display:block");
                 });
 
                 const mini_map_init = L.map(htmlId, {
@@ -341,7 +351,7 @@ class ZonePreview extends Component {
         let zoneGeofence = [];
         let i = 0;
         setInterval(() => {
-            if(this.selTime != null){
+            if (this.selTime != null) {
                 this.selTime = null;
             }
             if (bef[0] != selectedZones[0]) {
@@ -359,7 +369,16 @@ class ZonePreview extends Component {
                             "properties": {'name': polygon.name},
                             "geometry": wktgeomZone
                         }
-                        zoneGeofence[++i] = new L.geoJSON(geojsonFeatures);
+                        zoneGeofence[++i] = new L.geoJSON(geojsonFeatures, {
+                            style: {
+                                color: "red",
+                                weight: 1,
+                                opacity: 1,
+                                dashArray: '20,10',
+                                lineJoin: 'round',
+                                fillOpacity: 0
+                            }
+                        });
                         zoneGeofence[i].addTo(map)
                         this.getTimeSeries(polygon, zoneGeofence[i]);
                         // this.setState({selectedPolygon: polygon});
