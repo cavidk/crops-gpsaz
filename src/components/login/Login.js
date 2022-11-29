@@ -94,7 +94,8 @@ class Login extends Component {
                 console.log(err)
                 this.setState({error: "login failed"})
             } else {
-                request.auth.authenticate(res.headers.authorization.split(' ')[1], () => {
+                console.log("login: ", res.body)
+                request.auth.authenticate(res.body.token, () => {
                     this.setState({redirectToReferrer: true})
                 });
                 userModel.authenticated(res.data);

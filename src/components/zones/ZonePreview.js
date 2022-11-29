@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {FormControl, MenuItem, Select} from '@material-ui/core';
 import {withRouter} from '../map/withRouter';
 import DatePicker, {registerLocale} from "react-datepicker";
@@ -60,15 +60,19 @@ class ZonePreview extends Component {
             selectedZones: [],
             cloudCoverage: 25,
             logoutClick: false,
+            isOpen: false,
+            zones: []
         };
         this.setTimeSeries = this.setTimeSeries.bind(this);
         this.callApiSelectedTimeSelected = this.callApiSelectedTimeSelected.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
-    callApiSelectedTimeSelected(layer, date) {
+    callApiSelectedTimeSelected(layer, dates) {
+        this.setTimeSeries(dates)
         let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
-        let _date = date;
+        let _date = Array.isArray(dates) ? dates[0] : dates;
+        this.setState({selectedTime: new Date(_date)});
         if (this.sentinelHubLayer != null) {
             this.state.map.removeLayer(this.sentinelHubLayer);
         }
@@ -115,15 +119,15 @@ class ZonePreview extends Component {
         });
     }
 
-    setTimeSeries = val => {
-        const dateArray = [];
-        setTimeout(() => {
-            val.forEach((el) => {
-                dateArray.push(new Date(el));
+    setTimeSeries = (timeSeries) => {
+        let dateArray = [];
+        if (timeSeries.length > 0) {
+            timeSeries.forEach(date => {
+                dateArray.push(new Date(date));
             })
-        }, 1000);
-        this.setState({timeSeriesList: dateArray});
-        this.setState({timeSeriesFromMap: dateArray})
+            this.setState({timeSeriesList: dateArray});
+            this.setState({timeSeriesFromMap: dateArray})
+        }
     }
 
     callImageryFunction = (layerName) => {
@@ -131,6 +135,22 @@ class ZonePreview extends Component {
     };
 
     componentDidMount(elementId) {
+
+        const headers = { 'Content-Type': 'application/json', 'Authorization' : "Bearer " + JSON.parse(sessionStorage.getItem('jwt')) }
+        const fetchZones = async (page = 1) => {
+            const res = await fetch(
+                `http://127.0.0.1:8088/api/zones?page=${page}`,
+                {headers}
+            ).then(response => response.json());
+            return res;
+        };
+
+        fetchZones().then(response => {
+            this.setState({
+                zones: response.data.data
+            });
+        });
+
         this.fetchData();
         const {router} = this.props;
         // OpenStreetMap
@@ -392,31 +412,23 @@ class ZonePreview extends Component {
     };
 
     fetchData = () => {
-        request.get('users/' + request.auth.getSubject(), (err, res) => {
+        request.get('user', (err, res) => {
             if (err) {
                 console.log(err)
             } else {
-                this.setState({user: res.body})
-                request.get('users/privileges', (err, res) => {
-                    if (err) {
-                        console.log('error if :' + err)
-                    } else {
-                        this.setState({privilege: res.body})
-                    }
-                })
+                this.setState({user: res.body.data})
 
-                request.get('users/zones', (err, res) => {
+                request.get('zones', (err, res) => {
                     if (err) {
                         console.log('error if :' + err)
                     } else {
-                        for (let i = 0; i < res.body.length; i++) {
-                            this.zones.push(res.body[i]);
+                        for (let i = 0; i < res.body.data.data.length; i++) {
+                            this.zones.push(res.body.data.data[i]);
                         }
                     }
                 })
             }
         })
-
     }
 
     handleSelectChange = (event) => {
@@ -461,24 +473,22 @@ class ZonePreview extends Component {
         let today = new Date();
         let oneYrAgo = new Date();
         oneYrAgo.setFullYear(today.getFullYear() - 1);
-        let dateStrToday = Moment(today).format('YYYY-MM-DDTHH:mm');
-        let dateStrYearBefore = Moment(oneYrAgo).format('YYYY-MM-DDTHH:mm');
-        let request_url = 'imagery/timeSeries?bbox=' + bboxText + '&datetime=' + dateStrYearBefore + 'Z/' + dateStrToday + 'Z&collections=sentinel-2-l2a&cloud_coverage=' + this.state.cloudCoverage;
+        let dateStrToday = Moment(today).format('YYYY-MM-DDTHH:mm:ss');
+        let dateStrYearBefore = Moment(oneYrAgo).format('YYYY-MM-DDTHH:mm:ss');
+        let request_url = 'timeseries?bbox=' + bboxText + '&datetime=' + dateStrYearBefore + 'Z/' + dateStrToday + 'Z&collections=sentinel-2-l2a&cloud_coverage=' + this.state.cloudCoverage;
         request.get(request_url, (err, res) => {
             if (err) {
                 console.log('error if :' + err)
             } else {
-                const timeSeriesJson = JSON.parse(res.text);
-                Object.keys(timeSeriesJson.features).forEach(function (key) {
-                    timeSeries.push(timeSeriesJson.features[key]);
-                });
+                res.body.data.features.forEach(date => {
+                    timeSeries.push(date);
+                })
             }
             this.selTime = timeSeries[0];
             if (timeSeries.length > 0) {
-                this.callApiSelectedTimeSelected(this.state.selectVal, timeSeries[0]);
+                this.callApiSelectedTimeSelected(this.state.selectVal, timeSeries);
             }
         })
-        this.setTimeSeries(timeSeries);
     }
 
     handleCloudCoverageChange = (event, value) => {
@@ -500,6 +510,28 @@ class ZonePreview extends Component {
                 this.getTimeSeries(polygon, zoneGeofence)
             }
         });
+    }
+
+    setIsOpen = e => {
+        this.setState({isOpen: !this.state.isOpen});
+    }
+
+    openMobileBox(event) {
+        let el = document.getElementById('mobNav');
+        let toUp = document.getElementById('toUp');
+        let toDown = document.getElementById('toDown');
+        el.setAttribute("style", "margin-bottom: 0;");
+        toUp.setAttribute("style", "display: none;");
+        toDown.setAttribute("style", "display: block;");
+    }
+
+    closeMobileBox(event) {
+        let el = document.getElementById('mobNav');
+        let toUp = document.getElementById('toUp');
+        let toDown = document.getElementById('toDown');
+        el.setAttribute("style", "margin-bottom: -200px;");
+        toUp.setAttribute("style", "display: block;");
+        toDown.setAttribute("style", "display: none;");
     }
 
     render() {
@@ -542,7 +574,7 @@ class ZonePreview extends Component {
                                         selectRange returnValue="start"
                                         maxDate={new Date()}
                                         minDate={oneYrAgo}
-                                        includeDates={timeSeriesFromMap}
+                                        includeDates={this.state.timeSeriesFromMap}
                                         selected={this.state.selectedTime}
                             />
                         </FormControl>
@@ -616,6 +648,62 @@ class ZonePreview extends Component {
                         </div>
                     </div>
                     <div id="map"></div>
+                    <div id="mobNav" class="mobile-navigation">
+                        <div className="mob-nav-tool">
+                            <span id="toUp" className="toUp" onClick={this.openMobileBox}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path
+                                    d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"/></svg>
+                            </span>
+                            <span id="toDown" className="toDown" onClick={this.closeMobileBox}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path
+                                    d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></svg>
+                            </span>
+                        </div>
+                        <FormControl className={"observationForm-mobile"}>
+                            <label>Observation: </label>
+
+                            <Select onChange={this.handleSelectChange} value={this.state.selectVal}>
+                                <MenuItem value="NDVI">Green Vegetation</MenuItem>
+                                <MenuItem value="MOISTURE_INDEX">Moisture Index</MenuItem>
+                                <MenuItem value="TRUE_COLOR">Normal Image</MenuItem>
+                                <MenuItem value="SAVI">Soil Abj. Vegetation Index</MenuItem>
+                                <MenuItem value="SWIR">Water in Plants</MenuItem>
+                                <MenuItem value="NDWI">Water Index</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl className={"observationForm-mobile"}>
+                            <label>Date: </label>
+                            <DatePicker
+                                locale="az"
+                                style={{position: "relative", zIndex: 9999999}}
+                                onChange={this.handleDateChange}
+                                value={this.state.selectedTime}
+                                selectRange returnValue="start"
+                                maxDate={new Date()}
+                                minDate={oneYrAgo}
+                                includeDates={timeSeriesFromMap}
+                                selected={this.state.selectedTime}
+                            />
+                        </FormControl>
+                        <FormControl className={"observationForm-mobile"}>
+                            <label className={"cloudCoverageClass-mobile"}>Cloud coverage:</label>
+                            <Box style={{width: 150}} alignItems="center">
+                                <Slider
+                                    value={this.state.cloudCoverage}
+                                    valueLabelDisplay="auto"
+                                    marks
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                    style={{
+                                        color: "rgb(0 0 0 / 68%)"
+                                    }}
+                                    onChange={this.handleCloudCoverageChange}
+                                    onChangeCommitted={this.handleDragStop}
+                                />
+                            </Box>
+                        </FormControl>
+                    </div>
                     {/*<Map userZoneObject={this.zones} style={{}} zonePreviewCallback={this.handleTimeSeriesCallback}*/}
                     {/*     ref={this.child}>*/}
                     {/*</Map>*/}

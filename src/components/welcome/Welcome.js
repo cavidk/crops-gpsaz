@@ -40,25 +40,25 @@ class Welcome extends Component {
 
     componentDidMount = () => this.fetchData()
     fetchData = () => {
-        request.get('users/' + request.auth.getSubject(), (err, res) => {
+        request.get('user' + request.auth.getSubject(), (err, res) => {
             if (err) {
                 console.log(err)
             } else {
                 this.setState({user: res.body})
-                request.get('users/privileges', (err, res) => {
-                    if (err) {
-                        console.log('error if :' + err)
-                    } else {
-                        this.setState({privilege: res.body})
-                    }
-                })
+                // request.get('users/privileges', (err, res) => {
+                //     if (err) {
+                //         console.log('error if :' + err)
+                //     } else {
+                //         this.setState({privilege: res.body})
+                //     }
+                // })
 
-                request.get('users/zones', (err, res) => {
+                request.get('zones', (err, res) => {
                     if (err) {
                         console.log('error if :' + err)
                     } else {
                         for (let i = 0; i < res.body.length; i++) {
-                            this.zones.push(res.body[i]);
+                            this.zones.push(res.body.data.data[i]);
                         }
                     }
                 })

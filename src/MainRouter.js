@@ -4,6 +4,7 @@ import Header from './components/header/Header'
 import Login from './components/login/Login'
 import ZonePreview from './components/zones/ZonePreview'
 import user from "./models/user";
+// import SignUp from './components/signUp/SignUp'
 const APP_CONSTANTS = require('./ApplicationConstants');
 
 function RequireAuth({children}: { children: JSX.Element }) {
@@ -38,6 +39,7 @@ class MainRouter extends Component {
                 <Header/>
                 <Routes>
                     <Route path={APP_CONSTANTS.LOGIN_URL} element={<Login/>}/>
+                    {/*<Route path={APP_CONSTANTS.SIGNUP_URL} element={<SignUp/>}/>*/}
                     <Route path={APP_CONSTANTS.HOME_URL} element={
                             <RequireAuth>
                                 <ZonePreview/>

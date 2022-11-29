@@ -178,13 +178,13 @@
     width: max-content !important;
 }
 
-#sidebar{
+#sidebar {
     border: none !important;
     top: 30px !important;
     height: calc(100% - 31px) !important;
 }
 
-#sidebar .sidebar-tab{
+#sidebar .sidebar-tab {
     height: calc(100% - 80px)
 }
 
@@ -192,43 +192,46 @@
     padding: 2px 0 !important;
 }
 
-.cloudCoverageClass{
+.cloudCoverageClass {
     margin-right: 5px;
     margin-left: 5px;
 }
 
-.sidebarContentBody{
+.sidebarContentBody {
     height: calc(100% - 88px);
 }
 
-.MuiSlider-thumb>span{
+.MuiSlider-thumb > span {
     display: none;
     top: -5px !important;
     transform: rotate(180deg) !important;
 }
 
-.MuiSlider-thumb>span>span>span {
+.MuiSlider-thumb > span > span > span {
     transform: rotate(225deg) !important;
 }
 
-.MuiSlider-thumb.MuiSlider-active>span{
+.MuiSlider-thumb.MuiSlider-active > span {
     display: block;
 }
 
 .leaflet-sidebar-tabs > ul > li > a {
     color: blue !important;
 }
-.leaflet-top.leaflet-left{
-    top: 25px !important;
+
+.leaflet-top.leaflet-left {
+    top: 20px !important;
 }
-.leaflet-top.leaflet-right{
+
+.leaflet-top.leaflet-right {
     right: 5px !important;
     top: 30px !important;
     z-index: 99999;
     width: 36px !important;
     height: 36px !important;
 }
-.leaflet-top .leaflet-control-layers{
+
+.leaflet-top .leaflet-control-layers {
     margin: 0 !important;
     cursor: pointer;
 }
@@ -249,6 +252,7 @@
     left: 8%;
     display: none;
 }
+
 .lds-dual-ring:after {
     content: " ";
     display: block;
@@ -260,6 +264,7 @@
     border-color: #fff transparent #fff transparent;
     animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @keyframes lds-dual-ring {
     0% {
         transform: rotate(0deg);
@@ -268,4 +273,110 @@
         transform: rotate(360deg);
     }
 }
+
 /*Loader*/
+
+.mobile-navigation {
+    margin-bottom: -200px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 50px;
+    max-height: 300px;
+    background: white;
+    z-index: 999;
+    display: flex;
+    flex-flow: column;
+}
+
+.observationForm-mobile {
+    height: 40px !important;
+    padding: 10px !important;
+    display: flex !important;
+    flex-direction: unset !important;
+    align-items: center;
+}
+
+.observationForm-mobile > label {
+    padding: 8px 12px;
+    min-width: 150px;
+}
+
+.observationForm-mobile > .MuiInput-formControl {
+    margin: 0 !important;
+}
+
+.leaflet-top .leaflet-control-zoom {
+    margin: 0 !important;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    .mobile-navigation {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .observationClass {
+        display: none;
+    }
+
+    #sidebar {
+        border: none !important;
+        top: 0px !important;
+        height: 100% !important;
+    }
+
+    .leaflet-top.leaflet-right {
+        top: 0px !important;
+    }
+
+    .leaflet-top.leaflet-left {
+        top: 0px !important;
+    }
+
+    .MuiSlider-thumb > span {
+        display: none;
+        top: -34px !important;
+        transform: scale(1) translateY(-10px) !important;
+    }
+
+    .MuiSlider-thumb > span > span > span {
+        transform: rotate(45deg) !important;
+    }
+}
+
+.mob-nav-tool {
+    display: flex;
+    justify-content: center;
+}
+
+.mob-nav-tool > .toUp {
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    margin-top: -19px;
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.mob-nav-tool > .toDown {
+    display: none;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    margin-top: -19px;
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.leaflet-left {
+    left: 2px !important;
+}
+
+.toUp>svg{
+    margin-top: -9px;
+}
