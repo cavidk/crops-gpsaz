@@ -1,9 +1,7 @@
 import user from "../models/user";
 const request = require('superagent');
-// console.log("Env: ", process.env.ENVIRONMENT)
-// const  REACT_APP_API_BASE_URL = process.env.ENVIRONMENT === 'local' ? process.env.REACT_APP_API_BASE_URL :    'http://127.0.0.1:8080/api/';
 const  REACT_APP_API_BASE_URL = //process.env.REACT_APP_API_BASE_URL ||
-    'http://127.0.0.1:8088/api/';
+    'http://127.0.0.1:8000/api/';
 const login = (user, callback) => {
     request.post(REACT_APP_API_BASE_URL  + 'login')
             .set('Content-Type', 'application/json')

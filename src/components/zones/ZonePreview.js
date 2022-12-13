@@ -61,7 +61,8 @@ class ZonePreview extends Component {
             cloudCoverage: 25,
             logoutClick: false,
             isOpen: false,
-            zones: []
+            zones: [],
+            searchValue: ''
         };
         this.setTimeSeries = this.setTimeSeries.bind(this);
         this.callApiSelectedTimeSelected = this.callApiSelectedTimeSelected.bind(this);
@@ -136,23 +137,23 @@ class ZonePreview extends Component {
 
     componentDidMount(elementId) {
 
-        const headers = { 'Content-Type': 'application/json', 'Authorization' : "Bearer " + JSON.parse(sessionStorage.getItem('jwt')) }
-        const fetchZones = async (page = 1) => {
-            const res = await fetch(
-                `http://127.0.0.1:8088/api/zones?page=${page}`,
-                {headers}
-            ).then(response => response.json());
-            return res;
-        };
-
-        fetchZones().then(response => {
-            this.setState({
-                zones: response.data.data
-            });
-        });
+        // const headers = { 'Content-Type': 'application/json', 'Authorization' : "Bearer " + JSON.parse(sessionStorage.getItem('jwt')) }
+        // const fetchZones = async (page = 1) => {
+        //     const res = await fetch(
+        //         process.env.REACT_APP_API_BASE_URL + `zones?page=${page}`,
+        //         {headers}
+        //     ).then(response => response.json());
+        //     return res;
+        // };
+        //
+        // fetchZones().then(response => {
+        //     this.setState({
+        //         zones: response.data.data
+        //     });
+        // });
 
         this.fetchData();
-        const {router} = this.props;
+
         // OpenStreetMap
         let osm = L.tileLayer(REACT_APP_OSRM_URL, {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -173,7 +174,6 @@ class ZonePreview extends Component {
             OpenStreetMap: osm,
             GoogleSat: gst
         };
-        //
         L.control.layers(baseMaps).addTo(map);
         this.setState({map: map});
 
@@ -411,14 +411,18 @@ class ZonePreview extends Component {
         }, 1000);
     };
 
-    fetchData = () => {
-        request.get('user', (err, res) => {
+    fetchData = async (query = 'zones') => {
+        this.zones = [];
+        if (query != 'zones') {
+            query = 'zones?query=' + query;
+        }
+        await request.get('user', (err, res) => {
             if (err) {
                 console.log(err)
             } else {
                 this.setState({user: res.body.data})
 
-                request.get('zones', (err, res) => {
+                request.get(query, (err, res) => {
                     if (err) {
                         console.log('error if :' + err)
                     } else {
@@ -441,15 +445,130 @@ class ZonePreview extends Component {
         this.callApiSelectedTimeSelected(this.state.selectVal, val);
     }
 
-    handleSearchChange(event) {
-        let searchValue = event.target.value;
-        let sidebarRows = document.getElementById('sidebarZones');
+    createSidebarElement = (wktGeom, boundsZone, geometry, id, name, description, areaHa) => {
+        let htmlId = 'fieldmap' + id;
+        const el = `<div class="zoneTableRow">
+                            <div class="lds-dual-ring" id="sidebarElementChild${id}"></div>
+                            <div  class="fieldMiniMap" id=${htmlId}></div>
+                            <div class="zoneDescriptionDiv">
+                            <div class="zoneDescriptionTxt">
+                                <b><label>${name}</label></b><br>
+                                <b><label >${description}</label></b><br>
+                                <b><label >Area : ${areaHa} hectare</label></b>
+                             </div>
+                             </div>
+                           </div> <br/>`;
+        const temp = document.createElement("div");
+        const chc = document.createElement("input");
+        // chc.setAttribute("checked", "checked");
+        // chc.addEventListener('change', function change(event) {
+        //     handleSidebarChange(id);
+        // })
+        chc.setAttribute("type", "radio");
+        chc.setAttribute("name", "zone");
+        chc.value = id;
 
+        temp.setAttribute("class", "temp-class");
+        temp.setAttribute("detail", name);
+        temp.setAttribute("desc", description);
+        temp.setAttribute("area", areaHa);
+        temp.setAttribute("id", "sidebarElement" + id);
+
+        temp.innerHTML = el.trim();
+        temp.append(chc);
+        const sidebarlist = document.getElementById("sidebarZones");
+        let added = sidebarlist.insertAdjacentElement("beforeend", temp);
+        if (added) {
+            let zoneInMinimap = L.geoJSON(wktGeom);
+
+            // zoneInMinimap.on('mouseover', function (e) {
+            //     setHighlight(zoneInMinimap);
+            // });
+            //
+            // zoneInMinimap.on('mouseout', function (e) {
+            //     unsetHighlight(zoneInMinimap);
+            // });
+
+            zoneInMinimap.on('click', function (e) {
+                chc.setAttribute("checked", "checked");
+                this.state.map.fitBounds(zoneInMinimap.getBounds(), {
+                    maxZoom: 16,
+                    padding: [0, 50]
+                });
+                // handleSidebarChange(id);
+            });
+
+            const mini_map_init = L.map(htmlId, {
+                zoomControl: false,
+                scrollWheelZoom: false,
+                scrollpropogattion: false,
+                dragging: false,
+                attributionControl: false,
+                doubleClickZoom: false
+            });
+            L.tileLayer(REACT_APP_GOOGLESAT_URL, {}).addTo(mini_map_init);
+            zoneInMinimap.addTo(mini_map_init);//https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+            mini_map_init.fitBounds(zoneInMinimap.getBounds());
+        }
+    }
+
+    async handleSearchChange(event) {
+        let searchValue = event.target.value;
+        // const sidebarlist = document.getElementById("sidebarZones");
+        // sidebarlist.innerHTML = ''
+        // this.setState({searchValue:searchValue})
+        // await this.fetchData(searchValue)
+        // console.log(this.zones)
+        // this.zones.forEach(polygon => {
+        //     console.log(polygon)
+        //     let wktgeomZone = wkt.parse(polygon.geometry);
+        //     let geojsonFeatures = {
+        //         "type": "Feature", "properties": {'name': polygon.name}, "geometry": wktgeomZone
+        //     };
+        //     let myStyle = {
+        //         "opacity": 1
+        //     };
+        //     let zoneGeofence = L.geoJSON(geojsonFeatures, {
+        //         style: myStyle
+        //     });//.addTo(map);
+        //     let coords = [];
+        //     let coordsLatLng = [];
+        //
+        //     zoneGeofence.eachLayer(function (layer) {
+        //         layer.bindTooltip("", {
+        //             permanent: true, direction: 'center', className: 'labelstylezonename'
+        //         }).openTooltip();
+        //         coords = layer.feature.geometry.coordinates[0];
+        //         layer.feature.geometry.coordinates[0].forEach((vertex) => {
+        //             coordsLatLng.push(new L.latLng(vertex[1], vertex[0]));
+        //         });
+        //
+        //     });
+        //
+        //     // zoneGeofence.on('mouseover', function (e) {
+        //     //     setHighlight(zoneGeofence);
+        //     // });
+        //     //
+        //     // zoneGeofence.on('mouseout', function (e) {
+        //     //     unsetHighlight(zoneGeofence);
+        //     // });
+        //
+        //     zoneGeofence.on('click', function (e) {
+        //         request.auth.addZonePreview(polygon.id)
+        //     });
+        //
+        //     let areaHa = GeometryUtil.geodesicArea(coordsLatLng) / 10000;
+        //     areaHa = Number(areaHa).toFixed(3);
+        //
+        //     this.createSidebarElement(wktgeomZone, zoneGeofence.getBounds(), polygon.geometry, polygon.id, polygon.name, polygon.description, areaHa);
+        // });
+
+        let sidebarRows = document.getElementById('sidebarZones');
         let allChilds = [];
         allChilds = this.state.zoneTableRows;
         if (searchValue.length > 0) {
             sidebarRows.innerText = '';
-            allChilds.forEach((child: HTMLDivElement) => {
+            allChilds.forEach((child) => {
                 let zoneName = child.getAttribute("detail").toLowerCase();
                 let desc = child.getAttribute("desc").toLowerCase();
                 let area = child.getAttribute("area").toLowerCase();
