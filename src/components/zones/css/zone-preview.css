@@ -243,13 +243,7 @@
 
 /*Loader*/
 .lds-dual-ring {
-    display: inline-block;
-    width: max-content;
-    height: max-content;
-    position: absolute;
     z-index: 999;
-    top: 20%;
-    left: 8%;
     display: none;
 }
 
@@ -287,6 +281,7 @@
     z-index: 999;
     display: flex;
     flex-flow: column;
+    transition: 1s;
 }
 
 .observationForm-mobile {
@@ -379,4 +374,51 @@
 
 .toUp>svg{
     margin-top: -9px;
+}
+
+.loader {
+    border: 6px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 6px solid #3498db;
+    width: 30px;
+    height: 30px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+    margin: 10px auto;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* width */
+.sideBarZones::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+.sideBarZones::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.sideBarZones::-webkit-scrollbar-thumb {
+    background: #888888b8;
+}
+
+/* Handle on hover */
+.sideBarZones::-webkit-scrollbar-thumb:hover {
+    background: #888888cf;
+}
+
+#sidebar{
+    transition: 1s;
 }

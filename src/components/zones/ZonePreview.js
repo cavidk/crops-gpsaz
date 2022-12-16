@@ -42,10 +42,8 @@ class ZonePreview extends Component {
 
     constructor(props) {
         super(props);
-        this.child = React.createRef();
 
         this.state = {
-            user: {},
             timeSeriesFromMap: null,
             selectVal: 'NDVI',
             zoneTableRows: [],
@@ -767,7 +765,7 @@ class ZonePreview extends Component {
                         </div>
                     </div>
                     <div id="map"></div>
-                    <div id="mobNav" class="mobile-navigation">
+                    <div id="mobNav" className="mobile-navigation">
                         <div className="mob-nav-tool">
                             <span id="toUp" className="toUp" onClick={this.openMobileBox}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path
