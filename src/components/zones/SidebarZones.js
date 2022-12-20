@@ -134,12 +134,12 @@ class SidebarZones extends React.Component {
                     scrollableTarget="_sideBarZones"
                 >
                     {this.state.zones.map((i, index) => (
-                        <div className="temp-class" id={`sidebarElement${i.id}`}>
+                        <div key={`uniqueKey${i.id}`} className="temp-class" id={`sidebarElement${i.id}`}>
                             <div className="zoneTableRow">
-                                <div className="fieldMiniMap" id={`fieldmap${i.id}`}
+                                <div className={`fieldMiniMap`}
+                                     id={`fieldmap${i.id}`}
                                      onClick={() => this.handleMiniMapClick(this.props.map, i)}>
                                     <div className="lds-dual-ring" id={`sidebarElementChild${i.id}`}></div>
-
                                 </div>
                                 <div className="zoneDescriptionDiv">
                                     <div className="zoneDescriptionTxt">
@@ -295,7 +295,7 @@ class SidebarZones extends React.Component {
     callApiSelectedTimeSelected(layer = "NDVI", date, polygon) {
         if (polygon) {
             let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
-            if (this.sentinelHubLayer != null) {
+            if (this.sentinelHubLayer) {
                 this.props.map.removeLayer(this.sentinelHubLayer);
             }
 
@@ -347,6 +347,12 @@ class SidebarZones extends React.Component {
 
     showLoader(polygon) {
         let element = document.getElementById("sidebarElementChild" + polygon);
+        let allMinimaps = document.getElementsByClassName('fieldMiniMap');
+        let currentElement = document.getElementById(`fieldmap${polygon}`);
+        [].forEach.call(allMinimaps, function (el) {
+            el.classList.remove('active');
+        });
+        currentElement.classList.add('active')
         element.setAttribute("style", "display:block");
     }
 }

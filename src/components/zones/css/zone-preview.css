@@ -422,3 +422,7 @@
 #sidebar{
     transition: 1s;
 }
+
+#_sideBarZones .active{
+    border: 2px solid red;
+}
