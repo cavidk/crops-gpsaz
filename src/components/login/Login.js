@@ -1,23 +1,15 @@
-import React, {Component, useEffect, useState} from 'react'
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import Icon from '@material-ui/core/Icon'
+import React, {useState, useEffect} from 'react'
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
 import "./css/login.css";
 import userModel from "../../models/user";
-import {Navigate, useLocation, useNavigate, useParams} from "react-router-dom";
 import * as APP_CONSTONSTS from "../../ApplicationConstants";
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import FilledInput from '@material-ui/core/FilledInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
+import {withStyles} from '@material-ui/core/styles'
+import {Visibility, VisibilityOff} from '@material-ui/icons';
+import {Input, IconButton, InputAdornment, Typography, Button, Icon, Card, CardActions, CardContent} from '@material-ui/core';
+
+import {Alert} from '@material-ui/lab';
+
 const request = require('../../resources/request');
 
 const styles = theme => ({
@@ -69,97 +61,83 @@ function withRouter(Component) {
     return ComponentWithRouterProp;
 }
 
-class Login extends Component {
+const Login = (props) => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const [redirectToReferrer, setRedirectToReferrer] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+    const location = useLocation()
+    const navigate = useNavigate()
+    const classes = props.classes
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            error: '',
-            redirectToReferrer: false,
-            showPassword: false
-        };
-    }
+    useEffect(() => {
+        const {from} = location.state || {from: {pathname: APP_CONSTONSTS.WELCOME_URL}}
+        if (redirectToReferrer) {
+            navigate(from)
+        }
+    }, [redirectToReferrer])
 
-    handleLoginClick = () => {
+    const handleLoginClick = () => {
         const user = {
-            username: this.state.username || undefined,
-            password: this.state.password || undefined
+            username: username || undefined,
+            password: password || undefined
         }
 
         request.login(user, (err, res) => {
             if (err) {
-                console.log("An error has been encountered")
-                console.log(err)
-                this.setState({error: "login failed"})
+                setError("login failed")
             } else {
                 console.log("login: ", res.body)
                 request.auth.authenticate(res.body.token, () => {
-                    this.setState({redirectToReferrer: true})
+                    setRedirectToReferrer(true)
                 });
                 userModel.authenticated(res.data);
             }
         })
     }
 
-    handleChange = name => event => {
-        this.setState({[name]: event.target.value})
+    const handleChange = (event) => {
+        setUsername(event.target.value)
     }
 
-    handleKeyDown = e => {
+    const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            this.handleLoginClick()
+            handleLoginClick()
         }
     }
 
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
-    render() {
-        const {location} = this.props;
-        const {classes} = this.props;
+    const togglePassword = () => {
+        setShowPassword(!showPassword)
+    };
 
-        // const {from} = classes.location.state || {
-        // const {from} = window.location.state || {
-        const {from} = window.location.state || {
-            from: {
-                pathname: APP_CONSTONSTS.WELCOME_URL
-            }
-        }
-        const {redirectToReferrer} = this.state
-        if (redirectToReferrer) {
-            return (<Redirect to={from}/>)
-        }
-
-        const handleMouseDownPassword = (event) => {
-            event.preventDefault();
-        };
-
-        const togglePassword = () => {
-            this.setState({showPassword: !this.state.showPassword})
-        };
-
-        return (
-            <div style={{paddingTop:"200px"}}>
+    return (
+        <div style={{paddingTop: "200px"}}>
             <Card className={classes.card} style={{width: "max-content", marginTop: 0}}>
                 <CardContent>
                     <Input
                         id="username"
                         placeholder="Username"
                         className={classes.textField}
-                        value={this.state.username}
-                        onChange={this.handleChange('username')}
+                        value={username}
+                        onChange={handleChange}
                         style={{margin: "20px"}}
-                        onKeyDown={this.handleKeyDown}
+                        onKeyDown={handleKeyDown}
                     />
                     <br/>
                     <Input
                         id="password"
-                        type={this.state.showPassword ? "text" : "password"}
+                        type={showPassword ? "text" : "password"}
                         placeholder="Password"
                         className={classes.textField}
-                        value={this.state.password}
-                        onChange={this.handleChange('password')}
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
                         style={{margin: "20px"}}
+                        onKeyDown={handleKeyDown}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
@@ -167,31 +145,35 @@ class Login extends Component {
                                     onClick={togglePassword}
                                     onMouseDown={handleMouseDownPassword}
                                 >
-                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                    {showPassword ? <Visibility/> : <VisibilityOff/>}
                                 </IconButton>
                             </InputAdornment>
                         }
-                        onKeyDown={this.handleKeyDown}
                     />
-                    <br/> {
-                    this.state.error && (<Typography component="p" color="error">
-                        <Icon color="error" className={classes.error}>error</Icon>
-                        {this.state.error}
-                    </Typography>)
-                }
                 </CardContent>
                 <CardActions>
-                    <Button color="primary" variant="outlined" onClick={this.handleLoginClick}
-                            className={classes.login}>Sign in</Button>
+                    {error && (
+                        <Alert severity="error">Invalid username or password!</Alert>
+                    )}
+                </CardActions>
+                <CardActions>
+                    <Button onClick={handleLoginClick} color="primary" style={{backgroundColor: '#71b456', margin: 'auto'}} variant='contained'
+                            className={classes.loginButton} >
+                        <Typography variant="h6" className={classes.loginButtonLabel}>
+                            Login
+                        </Typography>
+                        <Icon className={classes.loginButtonIcon}>
+                            arrow_forward
+                        </Icon>
+                    </Button>
                 </CardActions>
             </Card>
-            </div>
-        )
-    }
+        </div>
+    )
 }
 
 Login.propTypes = {
-    classes: PropTypes.object.isRequired
-}
+    classes: PropTypes.object.isRequired,
+};
 
-export default withStyles(styles)(Login)
+export default withStyles(styles)(Login);

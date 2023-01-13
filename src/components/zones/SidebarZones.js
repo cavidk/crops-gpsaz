@@ -5,6 +5,8 @@ import GeometryUtil from "leaflet-geometryutil";
 import wkt from "wkt";
 import * as L from "leaflet";
 import Moment from "moment";
+import axios from "axios"
+const request = require('../../resources/request');
 
 const REACT_APP_SENTINEL_NDVI_API_ENDPOINT = process.env.REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
 const REACT_APP_GOOGLESAT_URL = process.env.REACT_APP_GOOGLESAT_URL;
@@ -77,9 +79,9 @@ class SidebarZones extends React.Component {
     fetchMoreData = async (searchText = this.state.searchText, search = false) => {
         let zones = []
         let page = this.state.page + 1
-        if(search === true) {
+        if (search === true) {
             this.state.zones.map((zone, i) => {
-                if(this.maps[zone.id]){
+                if (this.maps[zone.id]) {
                     this.maps[zone.id].off()
                     this.maps[zone.id].remove()
                 }
@@ -89,16 +91,17 @@ class SidebarZones extends React.Component {
             this.setState({page: 1})
             page = 1
         }
-        if(searchText == null){
+        if (searchText == null) {
             searchText = '';
         }
         const headers = {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': "Bearer " + JSON.parse(sessionStorage.getItem('jwt'))
         }
         const fetchZones = async () => {
             const res = await fetch(
-                process.env.REACT_APP_API_BASE_URL + `zones?page=${page}&query=${searchText}`,
+                request.REACT_APP_API_BASE_URL + `zones?page=${page}&query=${searchText}`,
                 {headers}
             ).then(response => response.json());
             return res;
@@ -107,18 +110,18 @@ class SidebarZones extends React.Component {
             zones = response.data.data.concat(zones)
         });
         const _zones = this.state.zones;
-        if(search === true){
+        if (search === true) {
             this.setState({zones: zones})
-        }else{
+        } else {
             this.setState({zones: _zones.concat(zones)})
             this.setState({page: this.state.page + 1})
         }
         zones.map((polygon, index) => {
             this.generateMiniMap(polygon)
         })
-        if(zones.length < 10){
+        if (zones.length < 10) {
             this.setState({hasMore: false})
-        }else{
+        } else {
             this.setState({hasMore: true})
         }
     };
@@ -180,7 +183,7 @@ class SidebarZones extends React.Component {
         }
         const getTimezones = async () => {
             const res = await fetch(
-                process.env.REACT_APP_API_BASE_URL + request_url,
+                request.REACT_APP_API_BASE_URL + request_url,
                 {headers}
             ).then(response => response.json());
             return res;
@@ -298,41 +301,31 @@ class SidebarZones extends React.Component {
             if (this.sentinelHubLayer) {
                 this.props.map.removeLayer(this.sentinelHubLayer);
             }
-
             let wktgeomZone = wkt.parse(polygon.geometry);
             let geojsonFeatures = {
                 "type": "Feature",
                 "properties": {'name': polygon.name},
                 "geometry": wktgeomZone
             }
-            let zoneGeofence = new L.geoJSON(geojsonFeatures,{
+            let zoneGeofence = new L.geoJSON(geojsonFeatures, {
                 style: {
                     color: "red",
-                        weight: 1,
-                        opacity: 1,
-                        dashArray: '20,10',
-                        lineJoin: 'round',
-                        fillOpacity: 0
+                    weight: 1,
+                    opacity: 1,
+                    dashArray: '20,10',
+                    lineJoin: 'round',
+                    fillOpacity: 0
                 }
             });
             zoneGeofence.addTo(this.props.map)
-
             let sentinelHubLayer = L.tileLayer.wms(baseUrl, {
-                attribution: '&copy; <a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
-                urlProcessingApi: "https://services.sentinel-hub.com/ogc/wms/1d4de4a3-2f50-493c-abd8-861dec3ae6b2",
                 layers: layer,
-                tileSize: 512,
-                preset: layer,
-                maxcc: 20,
                 time: Moment(date).format('YYYY-MM-DD'),
-                gain: '0.3',
-                gamma: '0.8',
                 transparent: true,
                 format: 'image/png',
                 crs: L.CRS.EPSG4326,
                 geometry: polygon.geometry
             }).addTo(this.props.map).bringToFront();
-
             this.sentinelHubLayer = sentinelHubLayer;
             this.props.map.fitBounds(zoneGeofence.getBounds(), {
                 maxZoom: 16,
@@ -342,7 +335,27 @@ class SidebarZones extends React.Component {
                 let element = document.getElementById("sidebarElementChild" + polygon.id);
                 element.setAttribute("style", "display:none");
             })
+            this.getStatistics(polygon)
         }
+    }
+
+    async getStatistics(polygon) {
+        const instance = axios.create({
+            baseURL: request.REACT_APP_API_BASE_URL
+        })
+        const config = {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'Accept': 'application/json',
+                'Authorization': "Bearer " + JSON.parse(sessionStorage.getItem('jwt'))
+            },
+            params: {
+                "zone": polygon.id
+            }
+        }
+        instance.get("/v1/statistics", config).then(resp => {
+            this.props.zoneStatisticsHandler(resp.data.data)
+        })
     }
 
     showLoader(polygon) {

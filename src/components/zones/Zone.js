@@ -18,6 +18,8 @@ import "../map/css/leaflet-sidebar.css";
 import "../map/css/leaflet-sidebar.min.css";
 import az from 'date-fns/locale/az';
 import SidebarZones from "./SidebarZones";
+import ZoneObservation from "./ZoneObservation";
+import ZoneTimeseries from "./ZoneTimeseries";
 
 const REACT_APP_OSRM_URL = process.env.REACT_APP_OSRM_URL;
 const REACT_APP_MAPBOX_URL = process.env.REACT_APP_MAPBOX_URL;
@@ -50,10 +52,12 @@ class Zone extends Component {
             cloudCoverage: 15,
             availableDates: null,
             searchText: null,
+            zoneStatistics: [],
         };
 
         this.availableDatesHandler = this.availableDatesHandler.bind(this)
         this.selectedDateHandler = this.selectedDateHandler.bind(this)
+        this.zoneStatisticsHandler = this.zoneStatisticsHandler.bind(this)
     }
 
     availableDatesHandler(timeSeries) {
@@ -72,6 +76,10 @@ class Zone extends Component {
         }
     }
 
+    zoneStatisticsHandler(zoneStatistics){
+        this.setState({zoneStatistics: zoneStatistics})
+    }
+
     componentWillMount() {
         const headers = {
             'Content-Type': 'application/json',
@@ -79,7 +87,7 @@ class Zone extends Component {
         }
         const fetchZones = async (page = 1) => {
             const res = await fetch(
-                process.env.REACT_APP_API_BASE_URL + `zones?page=${page}`,
+                request.REACT_APP_API_BASE_URL + `zones?page=${page}`,
                 {headers}
             ).then(response => response.json());
             return res;
@@ -166,7 +174,6 @@ class Zone extends Component {
             this.setState({cloudCoverage: value});
         }
     }
-
 
     openMobileBox(event) {
         let el = document.getElementById('mobNav');
@@ -299,6 +306,7 @@ class Zone extends Component {
                                             cloudCoverage={this.state.cloudCoverage}
                                             availableDatesHandler={this.availableDatesHandler}
                                             selectedDateHandler={this.selectedDateHandler}
+                                            zoneStatisticsHandler={this.zoneStatisticsHandler}
                                         />
                                     )}
                                 </div>
@@ -365,9 +373,12 @@ class Zone extends Component {
                             </Box>
                         </FormControl>
                     </div>
-                    {/*<Map userZoneObject={this.zones} style={{}} zonePreviewCallback={this.handleTimeSeriesCallback}*/}
-                    {/*     ref={this.child}>*/}
-                    {/*</Map>*/}
+                    {Object.keys(this.state.zoneStatistics).length&& (
+                        <ZoneObservation statistics={this.state.zoneStatistics}/>
+                    )}
+                    {Object.keys(this.state.zoneStatistics).length&& (
+                        <ZoneTimeseries statistics={this.state.zoneStatistics}/>
+                    )}
                 </div>
                 {}
             </React.Fragment>
