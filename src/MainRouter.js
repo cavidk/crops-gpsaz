@@ -4,6 +4,7 @@ import Header from './components/header/Header'
 import Login from './components/login/Login'
 // import ZonePreview from './components/zones/ZonePreview'
 import Zone from './components/zones/Zone'
+import Main from './components/Main/Main'
 import user from "./models/user";
 // import SignUp from './components/signUp/SignUp'
 const APP_CONSTANTS = require('./ApplicationConstants');
@@ -29,11 +30,15 @@ class MainRouter extends Component {
                 <Routes>
                     <Route path={APP_CONSTANTS.LOGIN_URL} element={<Login/>}/>
                     {/*<Route path={APP_CONSTANTS.SIGNUP_URL} element={<SignUp/>}/>*/}
+                    {/*<Route path={APP_CONSTANTS.HOME_URL} element={*/}
+                    {/*        <RequireAuth>*/}
+                    {/*            <Zone/>*/}
+                    {/*        </RequireAuth>*/}
+                    {/*    }*/}
+                    {/*/>*/}
                     <Route path={APP_CONSTANTS.HOME_URL} element={
-                            <RequireAuth>
-                                <Zone/>
-                            </RequireAuth>
-                        }
+                            <Main/>
+                    }
                     />
                     <Route path="*" element={<Navigate to={APP_CONSTANTS.HOME_URL}/>}/>
                 </Routes>

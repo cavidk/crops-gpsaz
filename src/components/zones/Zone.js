@@ -53,10 +53,12 @@ class Zone extends Component {
             availableDates: null,
             searchText: null,
             zoneStatistics: [],
+            zoneTimeseries: [],
         };
 
         this.availableDatesHandler = this.availableDatesHandler.bind(this)
         this.selectedDateHandler = this.selectedDateHandler.bind(this)
+        this.zoneTimeseriesHandler = this.zoneTimeseriesHandler.bind(this)
         this.zoneStatisticsHandler = this.zoneStatisticsHandler.bind(this)
     }
 
@@ -69,15 +71,16 @@ class Zone extends Component {
             this.setState({availableDates: dateArray})
         }
     }
-
     selectedDateHandler(date) {
         if (date.toDateString() != this.state.selectedDate.toDateString()) {
             this.setState({selectedDate: date})
         }
     }
-
-    zoneStatisticsHandler(zoneStatistics){
+    zoneStatisticsHandler(zoneStatistics) {
         this.setState({zoneStatistics: zoneStatistics})
+    }
+    zoneTimeseriesHandler(zoneTimeseries) {
+        this.setState({zoneTimeseries: zoneTimeseries})
     }
 
     componentWillMount() {
@@ -96,7 +99,6 @@ class Zone extends Component {
             this.setState({zones: response.data.data});
         });
     }
-
     componentDidMount() {
         // OpenStreetMap
         let osm = L.tileLayer(REACT_APP_OSRM_URL, {
@@ -151,30 +153,25 @@ class Zone extends Component {
     handleSelectChange = (event) => {
         this.setState({sentinelType: event.target.value});
     };
-
     handleDateChange = (val) => {
         this.setState({selectedDate: val});
     }
-
     handleSearchChange = (event) => {
         let searchValue = event.target.value;
-        if(searchValue != this.state.searchText){
+        if (searchValue != this.state.searchText) {
             this.setState({searchText: searchValue})
         }
     }
-
     handleCloudCoverageChange = (event, value) => {
         if (this.state.sliderCloudCoverage !== value) {
             this.setState({sliderCloudCoverage: value});
         }
     }
-
     handleDragStop = (e, value) => {
         if (this.state.cloudCoverage !== value) {
             this.setState({cloudCoverage: value});
         }
     }
-
     openMobileBox(event) {
         let el = document.getElementById('mobNav');
         let toUp = document.getElementById('toUp');
@@ -183,7 +180,6 @@ class Zone extends Component {
         toUp.setAttribute("style", "display: none;");
         toDown.setAttribute("style", "display: block;");
     }
-
     closeMobileBox(event) {
         let el = document.getElementById('mobNav');
         let toUp = document.getElementById('toUp');
@@ -210,11 +206,10 @@ class Zone extends Component {
 
         return (
             <React.Fragment>
-                <div className={"mapBody"}>
-                    <div className={"observationClass"}>
+                <div className={"container"}>
+                    <div className={"header"}>
                         <label className={"observationLabel"}>Observation</label>
                         <FormControl className={"observationForm"}>
-                            {/*<InputLabel>Layers</InputLabel>*/}
                             <Select onChange={this.handleSelectChange} value={this.state.sentinelType}>
                                 <MenuItem value="NDVI">Green Vegetation</MenuItem>
                                 <MenuItem value="MOISTURE_INDEX">Moisture Index</MenuItem>
@@ -255,6 +250,7 @@ class Zone extends Component {
                                 />
                             </Box>
                         </FormControl>
+
                         <div></div>
                         {request.auth.isAuthenticated() && (
                             <label aria-label="Logout"
@@ -296,19 +292,18 @@ class Zone extends Component {
                                 <input className="searchbox" onChange={this.handleSearchChange} type="text"
                                        placeholder="Zona adı,təsvir, sahə ..."/><br/>
                                 <div className="sidebar-tab">
-                                    {this.state.zones.length && (
-                                        <SidebarZones
-                                            map={this.state.map}
-                                            zones={this.state.zones}
-                                            searchText={this.state.searchText}
-                                            sentinelType={this.state.sentinelType}
-                                            selectedDate={this.state.selectedDate}
-                                            cloudCoverage={this.state.cloudCoverage}
-                                            availableDatesHandler={this.availableDatesHandler}
-                                            selectedDateHandler={this.selectedDateHandler}
-                                            zoneStatisticsHandler={this.zoneStatisticsHandler}
-                                        />
-                                    )}
+                                    <SidebarZones
+                                        map={this.state.map}
+                                        zones={this.state.zones}
+                                        searchText={this.state.searchText}
+                                        sentinelType={this.state.sentinelType}
+                                        selectedDate={this.state.selectedDate}
+                                        cloudCoverage={this.state.cloudCoverage}
+                                        availableDatesHandler={this.availableDatesHandler}
+                                        selectedDateHandler={this.selectedDateHandler}
+                                        zoneTimeseriesHandler={this.zoneTimeseriesHandler}
+                                        zoneStatisticsHandler={this.zoneStatisticsHandler}
+                                    />
                                 </div>
                             </div>
                             <div className="leaflet-sidebar-footer">
@@ -373,14 +368,16 @@ class Zone extends Component {
                             </Box>
                         </FormControl>
                     </div>
-                    {Object.keys(this.state.zoneStatistics).length&& (
-                        <ZoneObservation statistics={this.state.zoneStatistics}/>
-                    )}
-                    {Object.keys(this.state.zoneStatistics).length&& (
-                        <ZoneTimeseries statistics={this.state.zoneStatistics}/>
-                    )}
-                </div>
-                {}
+                    <div className="bottom">
+                        {Object.keys(this.state.zoneStatistics).length && (
+                            <ZoneObservation statistics={this.state.zoneTimeseries}/>
+                        )}
+                        {Object.keys(this.state.zoneStatistics).length && (
+                            <ZoneTimeseries timeseries={this.state.zoneTimeseries}
+                                            statistics={this.state.zoneStatistics}/>
+                        )}
+                    </div>
+            </div>
             </React.Fragment>
 
         )

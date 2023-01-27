@@ -6,6 +6,7 @@ import wkt from "wkt";
 import * as L from "leaflet";
 import Moment from "moment";
 import axios from "axios"
+import Loading from '../loader/Loading'
 const request = require('../../resources/request');
 
 const REACT_APP_SENTINEL_NDVI_API_ENDPOINT = process.env.REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
@@ -38,17 +39,13 @@ class SidebarZones extends React.Component {
 
     componentWillMount() {
         this.setState({zones: this.props.zones})
-        this.setState({map: this.props.map})
+       this.setState({map: this.props.map})
     }
 
     componentDidMount() {
         this.props.zones.map((polygon, index) => {
             this.generateMiniMap(polygon)
         })
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        // console.log("prev: ", prevState)
     }
 
     componentWillUpdate(nextProps, nextState, nextContext) {
@@ -73,6 +70,14 @@ class SidebarZones extends React.Component {
             if (this.state.polygon) {
                 this.getTimeSeries(this.state.polygon, nextProps.cloudCoverage)
             }
+        }
+
+        if(nextProps.zones != this.state.zones){
+            this.setState({zones: nextProps.zones})
+            nextProps.zones.map((polygon, index) => {
+                console.log("P ", polygon.id)
+                // this.generateMiniMap(polygon)
+            })
         }
     }
 
@@ -133,7 +138,7 @@ class SidebarZones extends React.Component {
                     dataLength={this.state.zones.length}
                     next={this.fetchMoreData}
                     hasMore={this.state.hasMore}
-                    loader={<div className="loader"></div>}
+                    loader={<Loading />}
                     scrollableTarget="_sideBarZones"
                 >
                     {this.state.zones.map((i, index) => (
@@ -147,7 +152,7 @@ class SidebarZones extends React.Component {
                                 <div className="zoneDescriptionDiv">
                                     <div className="zoneDescriptionTxt">
                                         <b><label>{i.name}</label></b><br></br>
-                                        <b><label>{i.description}</label></b><br></br>
+                                        {/*<b><label>{i.description}</label></b><br></br>*/}
                                         <b><label>Area : {this.calculateArea(i)} hectare</label></b>
                                     </div>
                                 </div>
@@ -350,9 +355,16 @@ class SidebarZones extends React.Component {
                 'Authorization': "Bearer " + JSON.parse(sessionStorage.getItem('jwt'))
             },
             params: {
-                "zone": polygon.id
+                zone: polygon.id,
+                cloudCoverage: this.state.cloudCoverage,
+                selectedDate: this.state.selectedDate,
+                sentinelType: this.state.sentinelType
             }
         }
+        instance.get("/v1/zones/" + polygon.id, config).then(resp => {
+            this.props.zoneTimeseriesHandler(resp.data.data)
+        })
+
         instance.get("/v1/statistics", config).then(resp => {
             this.props.zoneStatisticsHandler(resp.data.data)
         })

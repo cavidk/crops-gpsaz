@@ -9,12 +9,12 @@
     color: #fff;
 }
 
-.observationClass {
+.header {
     position: absolute;
-    top: 0;
+    top: 10px;
     left: 0;
     width: 100%;
-    background-color: #fff;
+    background-color: #fff9;
     height: 30px;
     line-height: 24px;
     text-align: center;
@@ -26,15 +26,15 @@
     align-items: center;
 }
 
-.mapBody {
-    position: relative;
-    border-bottom: none;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    height: calc(100%);
-}
+/*.container {*/
+/*    position: relative;*/
+/*    border-bottom: none;*/
+/*    border-top-left-radius: 5px;*/
+/*    border-top-right-radius: 5px;*/
+/*    height: calc(100%);*/
+/*}*/
 
-.mapBody #map {
+.container #map {
     height: 100% !important;
 }
 
@@ -64,7 +64,7 @@
     z-index: 999 !important;
 }
 
-.observationClass .MuiInput-underline:before {
+.header .MuiInput-underline:before {
     border: none !important;
 }
 
@@ -89,11 +89,6 @@
 
 .MuiMenu-list option {
     cursor: pointer;
-}
-
-.leaflet-sidebar-right {
-    right: 0;
-    /*left: 6px;*/
 }
 
 @media (min-width: 0px) {
@@ -150,43 +145,11 @@
     height: 3vh !important;
 }
 
-@media (min-width: 1200px) {
-    .leaflet-sidebar {
-        width: 400px !important;
-        max-width: 400px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .leaflet-sidebar-right ~ .leaflet-control-container .leaflet-right {
-        /*right: 355px !important;*/
-    }
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-    .leaflet-sidebar-right ~ .leaflet-control-container .leaflet-right {
-        right: 345px !important;
-    }
-}
-
-.leaflet-sidebar.collapsed {
-    width: 40px !important;
-    height: 100% !important;
-}
-
 .leaflet-control-layers-expanded {
     width: max-content !important;
 }
 
-#sidebar {
-    border: none !important;
-    top: 30px !important;
-    height: calc(100% - 31px) !important;
-}
 
-#sidebar .sidebar-tab {
-    height: calc(100% - 80px)
-}
 
 .MuiSlider-root {
     padding: 2px 0 !important;
@@ -241,7 +204,7 @@
     height: 36px !important;
 }
 
-/*Loader*/
+/*loader*/
 .lds-dual-ring {
     z-index: 999;
     display: none;
@@ -268,7 +231,7 @@
     }
 }
 
-/*Loader*/
+/*loader*/
 
 .mobile-navigation {
     margin-bottom: -200px;
@@ -313,7 +276,7 @@
 }
 
 @media (max-width: 768px) {
-    .observationClass {
+    .header {
         display: none;
     }
 
@@ -399,26 +362,6 @@
 }
 
 
-/* width */
-.sideBarZones::-webkit-scrollbar {
-    width: 8px;
-}
-
-/* Track */
-.sideBarZones::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-/* Handle */
-.sideBarZones::-webkit-scrollbar-thumb {
-    background: #888888b8;
-}
-
-/* Handle on hover */
-.sideBarZones::-webkit-scrollbar-thumb:hover {
-    background: #888888cf;
-}
-
 #sidebar{
     transition: 1s;
 }
@@ -428,13 +371,39 @@
 }
 
 
-.observation{
+
+
+/*canvas{*/
+/*    width: 800px !important;*/
+/*    height: 180px !important;*/
+/*}*/
+
+.bottom{
     position: absolute;
-    bottom: 20px;
-    left: 20px;
-    min-height: 100px;
-    min-width: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+}
+
+.observation{
+    position: relative;
+    width: 100px;
     background-color: white;
     z-index: 99;
     display: grid;
+}
+
+.chart{
+    position: relative;
+    margin-left: 20px;
+    height: 250px;
+    z-index: 99;
+    background: white;
+    width: 88% !important;
+}
+
+.chart canvas{
+    width: 100% !important;
 }
