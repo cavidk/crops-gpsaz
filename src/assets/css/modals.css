@@ -1,0 +1,172 @@
+.cdk-overlay-container, .cdk-global-overlay-wrapper {
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.cdk-overlay-container {
+    position: fixed;
+    z-index: 1000;
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 1;
+}
+
+.cdk-overlay-backdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    transition: opacity .4s cubic-bezier(.25,.8,.25,1);
+    opacity: 0;
+}
+
+.cdk-overlay-connected-position-bounding-box {
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    min-width: 1px;
+    min-height: 1px;
+}
+
+
+.cdk-overlay-pane {
+    position: absolute;
+    pointer-events: auto;
+    box-sizing: border-box;
+    z-index: 1000;
+    display: flex;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.mat-menu-panel {
+    min-width: 112px;
+    max-width: 280px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 48px);
+    border-radius: 4px;
+    outline: 0;
+    min-height: 64px;
+    position: relative;
+}
+
+.mat-menu-panel.cm-menu-select {
+    background: var(--dropdown-background);
+    max-width: none;
+    border-radius: 8px;
+}
+
+.mat-menu-panel {
+    min-height: initial!important;
+}
+
+.mat-elevation-z4 {
+    box-shadow: 0 2px 4px -1px #0003,0 4px 5px #00000024,0 1px 10px #0000001f;
+}
+
+.mat-menu-panel.cm-menu-select .mat-menu-content {
+    background: var(--dropdown-background);
+    box-shadow: 0 8px 16px #01020333;
+}
+
+.mat-menu-content:not(:empty) {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.mat-menu-content .user {
+    display: flex;
+    min-width: 200px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.mat-menu-content .user .user-avatar {
+    display: flex;
+    width: 48px;
+    height: 48px;
+    margin: 4px 12px 0 0;
+}
+
+.mat-menu-content .user .user-avatar .mat-icon {
+    width: 48px;
+    height: 48px;
+}
+
+.mat-menu-content .user   .name {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-primary);
+    letter-spacing: .25px;
+}
+
+.mat-menu-content .user  .email {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: var(--text-secondary);
+    letter-spacing: .4px;
+}
+
+.mat-menu-panel.cm-menu-select .mat-menu-content .mat-menu-item:hover {
+    color: var(--text-primary);
+    background: var(--dropdown-hover);
+}
+
+.user-backdrop+* .mat-menu-panel.cm-menu-select .mat-menu-content .mat-menu-item {
+    padding-left: 24px;
+}
+
+.mat-menu-panel.cm-menu-select .mat-menu-content .mat-menu-item {
+    height: 32px;
+    padding: 0 16px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 32px;
+    color: var(--text-secondary);
+    letter-spacing: .25px;
+    background: transparent;
+}
+.mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]) {
+    background: rgba(0,0,0,.04);
+}
+
+button.mat-menu-item {
+    width: 100%;
+}
+
+.mat-menu-item {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    line-height: 48px;
+    height: 48px;
+    padding: 0 16px;
+    text-align: left;
+    text-decoration: none;
+    max-width: 100%;
+    position: relative;
+}
+
+.mat-menu-panel.cm-menu-select .mat-menu-content .mat-menu-item:hover {
+    color: var(--text-primary);
+    background: var(--dropdown-hover);
+}

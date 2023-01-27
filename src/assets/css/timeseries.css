@@ -1,0 +1,877 @@
+.bottom-panel-wrapper {
+    position: relative;
+    z-index: 10;
+}
+
+.bottom-panel-tools {
+    position: absolute;
+    width: 100%;
+    top: -64px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: auto;
+    padding: 0 16px 20px 12px;
+}
+
+.cm-bottom-menu-container {
+    display: flex;
+    flex-direction: column;
+    background: var(--background-primary);
+}
+
+.cm-bottom-menu-container .scenes-container {
+    display: flex;
+}
+
+.cm-bottom-menu-container .wrapper-bottom-panel {
+    display: flex;
+    position: relative;
+}
+
+.cm-chart-options {
+    display: block;
+    min-width: 192px;
+    max-width: 192px;
+    padding: 16px 16px 10px;
+    /*z-index: 1;*/
+    position: relative;
+}
+
+.cm-chart {
+    display: block;
+    position: relative;
+    width: 100%;
+    background: var(--background-secondary);
+    padding-top: 12px;
+    padding-bottom: 10px;
+    height: 288px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.cm-chart-options .index-select-wrp {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.cm-chart-options .ui-date-range {
+    margin-bottom: 12px;
+    display: block;
+}
+
+.cm-chart-options .ui-date-range .field-page .ui-date-picker {
+    display: block;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+/*BEGIN NG SELECT*/
+.ng-select {
+    padding-bottom: 1.25em;
+}
+
+.ng-select {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+}
+
+.index-select-wrp .index-select {
+    width: 100%;
+}
+
+.ng-select.ng-select-single, .ng-select.ng-select-multiple {
+    padding-bottom: 0;
+    margin-bottom: 2px;
+    min-height: 56px;
+}
+
+.ng-select.ng-select-single.ng-select-single, .ng-select.ng-select-multiple.ng-select-single {
+    max-height: 56px;
+}
+
+.ng-select.ng-select-single.ng-select-single, .ng-select.ng-select-multiple.ng-select-single {
+    max-height: 56px;
+}
+
+.ng-select .index-select-wrp .index-select {
+    width: 100%;
+}
+
+.ng-select.ng-select-opened .ng-select-container {
+    z-index: 1001;
+}
+
+.ng-select .ng-select-container {
+    color: #000000de;
+    align-items: baseline;
+    min-height: 51.5px;
+}
+
+.ng-select .ng-select-container {
+    cursor: default;
+    display: flex;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.ng-select.ng-select-single .ng-select-container, .ng-select.ng-select-multiple .ng-select-container {
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    padding: 0 12px 0 9px;
+    background: var(--input-background);
+    color: var(--text-primary);
+    border-radius: 8px;
+}
+
+.ng-select.ng-select-single .ng-select-container, .ng-select.ng-select-multiple .ng-select-container {
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    padding: 0 12px 0 9px;
+    background: var(--input-background);
+    color: var(--text-primary);
+    border-radius: 8px;
+}
+
+.ng-select.ng-select-opened .ng-select-container {
+    z-index: 1001;
+}
+
+.ng-select .ng-select-container .ng-value-container {
+    align-items: stretch;
+    padding: .4375em 0;
+    border-top: .84375em solid transparent;
+}
+
+.ng-select .ng-select-container .ng-value-container {
+    display: flex;
+    flex: 1;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container, .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+    width: 80%;
+    border-top: 0;
+    padding: 0;
+    min-height: 20px;
+    margin-right: 12px;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container, .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+    width: 80%;
+    border-top: 0;
+    padding: 0;
+    min-height: 20px;
+    margin-right: 12px;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container, .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-filtered .ng-select-container .ng-placeholder {
+    display: initial;
+}
+
+.ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-opened .ng-placeholder {
+    transform: translateY(-1.28125em) scale(.75) perspective(100px) translateZ(.001px);
+}
+
+.ng-select.ng-select-single .ng-placeholder, .ng-select.ng-select-multiple .ng-placeholder {
+    max-width: calc(100% - 36px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-placeholder {
+    position: absolute;
+    color: #0000008a;
+    transform-origin: left 0;
+    transition: transform .4s cubic-bezier(.25, .8, .25, 1), color .4s cubic-bezier(.25, .8, .25, 1), width .4s cubic-bezier(.25, .8, .25, 1);
+}
+
+.ng-select.ng-select-single .ng-has-value .ng-value-container .ng-placeholder, .ng-select.ng-select-single.ng-select-opened .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple .ng-has-value .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple.ng-select-opened .ng-value-container .ng-placeholder {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--input-placeholder);
+    top: 16px;
+    transform: translateY(-.8125em) scale(1) perspective(100px) translateZ(.001px);
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+    color: var(--input-placeholder);
+    transition: transform .3s, font-size .3s, line-height .3s;
+}
+
+.ng-select.ng-select-single .ng-has-value .ng-value-container .ng-placeholder, .ng-select.ng-select-single.ng-select-opened .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple .ng-has-value .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple.ng-select-opened .ng-value-container .ng-placeholder {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--input-placeholder);
+    top: 16px;
+    transform: translateY(-.8125em) scale(1) perspective(100px) translateZ(.001px);
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+    color: var(--input-placeholder);
+    transition: transform .3s, font-size .3s, line-height .3s;
+}
+
+.ng-select.ng-select-single.ng-select-opened .ng-select-container .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple.ng-select-opened .ng-select-container .ng-value-container .ng-placeholder {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--text-accent);
+}
+
+.ng-select.ng-select-single.ng-select-opened .ng-select-container .ng-value-container .ng-placeholder, .ng-select.ng-select-multiple.ng-select-opened .ng-select-container .ng-value-container .ng-placeholder {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--text-accent);
+}
+
+.ng-select div, .ng-select input, .ng-select span {
+    box-sizing: border-box;
+}
+
+.ng-select.ng-select-single.ng-select-single .ng-value, .ng-select.ng-select-multiple.ng-select-single .ng-value {
+    margin-top: 20px;
+}
+
+.ng-select.ng-select-single.ng-select-single .ng-value, .ng-select.ng-select-multiple.ng-select-single .ng-value {
+    margin-top: 20px;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value, .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input {
+    display: flex;
+    max-width: 100%;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value, .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input {
+    display: flex;
+    max-width: 100%;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container, .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ng-select.ng-select-single.ng-select-single .ng-input, .ng-select.ng-select-multiple.ng-select-single .ng-input {
+    margin-top: 16px;
+    bottom: 8px;
+}
+
+.ng-select.ng-select-single.ng-select-single .ng-input, .ng-select.ng-select-multiple.ng-select-single .ng-input {
+    padding-left: 9px;
+}
+
+.ng-select.ng-select-single.ng-select-single .ng-input, .ng-select.ng-select-multiple.ng-select-single .ng-input {
+    margin-top: 16px;
+    bottom: 8px;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input {
+    opacity: 0;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value, .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input {
+    display: flex;
+    max-width: 100%;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    position: absolute;
+    left: 0;
+    width: 100%;
+}
+
+.ng-select div, .ng-select input, .ng-select span {
+    box-sizing: border-box;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input > input {
+    box-sizing: content-box;
+    background: none transparent;
+    border: 0 none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+    cursor: default;
+    width: 100%;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input input, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input input {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-primary);
+    caret-color: var(--accent-primary);
+    max-width: calc(100% - 48px);
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input input, .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input input {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-primary);
+    caret-color: var(--accent-primary);
+    max-width: calc(100% - 48px);
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input > input[readonly] {
+    -webkit-user-select: none;
+    user-select: none;
+    width: 0;
+    padding: 0;
+}
+
+.ng-select div, .ng-select input, .ng-select span {
+    box-sizing: border-box;
+}
+
+.ng-select .ng-arrow-wrapper {
+    bottom: 2px;
+}
+
+.ng-select .ng-arrow-wrapper {
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
+    align-self: flex-end;
+    bottom: 9px;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper, .ng-select.ng-select-multiple .ng-select-container .ng-arrow-wrapper {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    width: 20px;
+    height: 20px;
+    bottom: 0;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper, .ng-select.ng-select-multiple .ng-select-container .ng-arrow-wrapper {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    width: 20px;
+    height: 20px;
+    bottom: 0;
+}
+
+.ng-select .ng-select-container:after {
+    border-bottom: thin solid rgba(0, 0, 0, .42);
+    content: "";
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    transition: border-color .3s cubic-bezier(.55, 0, .55, .2);
+}
+
+.ng-select.ng-select-single .ng-select-container:after, .ng-select.ng-select-multiple .ng-select-container:after {
+    border-bottom-color: transparent;
+}
+
+.ng-select.ng-select-single .ng-select-container:after, .ng-select.ng-select-multiple .ng-select-container:after {
+    border-bottom-color: transparent;
+}
+
+.ng-select div, .ng-select input, .ng-select span {
+    box-sizing: border-box;
+}
+
+.ng-select .ng-arrow-wrapper .ng-arrow {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid;
+    margin: 0 4px;
+    color: #0000008a;
+}
+
+.ng-select .ng-arrow-wrapper .ng-arrow {
+    pointer-events: none;
+    display: inline-block;
+    height: 0;
+    width: 0;
+    position: relative;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper .ng-arrow, .ng-select.ng-select-multiple .ng-select-container .ng-arrow-wrapper .ng-arrow {
+    border-width: 4px;
+    color: var(--text-primary);
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper .ng-arrow, .ng-select.ng-select-multiple .ng-select-container .ng-arrow-wrapper .ng-arrow {
+    border-width: 4px;
+    color: var(--text-primary);
+}
+
+.ng-select.ng-select-single .ng-select-container:hover, .ng-select.ng-select-multiple .ng-select-container:hover {
+    cursor: pointer;
+    background: var(--input-background-action);
+    transition: .3s;
+}
+
+.ng-select.ng-select-single.ng-select-focused .ng-select-container, .ng-select.ng-select-multiple.ng-select-focused .ng-select-container {
+    background: var(--input-background-action);
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper .ng-arrow, .ng-select.ng-select-multiple .ng-select-container .ng-arrow-wrapper .ng-arrow {
+    border-width: 4px;
+    color: var(--text-primary);
+}
+
+.ng-select.ng-select-single.ng-select-opened .ng-arrow-wrapper .ng-arrow, .ng-select.ng-select-multiple.ng-select-opened .ng-arrow-wrapper .ng-arrow {
+    color: var(--text-primary);
+    transform: rotate(-180deg);
+}
+
+/*END NG SELECT*/
+
+
+.field-page .ui-date-picker:last-child {
+    margin: 0;
+}
+
+.field-page .ui-date-picker {
+    display: block;
+    margin-bottom: 12px;
+}
+
+.ui-date-picker .wrap-date-picker {
+    position: relative;
+}
+
+.ui-date-picker .mat-form-field.mat-form-field-appearance-fill,
+.ui-date-picker .mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill {
+    position: relative;
+    width: 100%;
+    padding: 0;
+    border-radius: 8px;
+    background: var(--input-background);
+}
+
+.ui-date-picker .mat-form-field {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+}
+
+.ui-date-picker .mat-form-field.mat-form-field-appearance-fill:hover,
+.ui-date-picker .mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill:hover {
+    background: var(--input-background-action);
+}
+
+.ui-date-picker .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper,
+.ui-date-picker .mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper {
+    padding: 0;
+}
+
+
+.mat-form-field-flex {
+    display: inline-flex;
+    align-items: baseline;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #0000000a;
+}
+
+.ui-date-picker .mat-form-field-appearance-fill .mat-form-field-flex {
+    border-radius: 4px 4px 0 0;
+    padding: .75em .75em 0 .75em;
+}
+
+.ui-date-picker .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex,
+.ui-date-picker .mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex {
+    min-height: 56px;
+    align-items: stretch;
+    background: 0;
+    border-radius: 0;
+    padding: .75em .75em 0;
+}
+
+
+.bottom-panel-wrapper .mat-form-field-infix {
+    padding: .5em 0;
+    border-top: .84375em solid rgba(0, 0, 0, 0);
+}
+
+.bottom-panel-wrapper .mat-form-field-infix {
+    display: block;
+    position: relative;
+    flex: auto;
+    min-width: 0;
+    width: 180px;
+}
+
+.bottom-panel-wrapper .mat-form-field-appearance-fill .mat-form-field-infix {
+    padding: .25em 0 .75em;
+}
+
+.bottom-panel-wrapper .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix,
+.bottom-panel-wrapper .mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+    font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: .4px;
+}
+
+.mat-input-element {
+    caret-color: var(--text-accent) !important;
+}
+
+.mat-input-element, .mat-input-element::-webkit-search-cancel-button,
+.mat-input-element::-webkit-search-decoration,
+.mat-input-element::-webkit-search-results-button,
+.mat-input-element::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+}
+
+input.mat-input-element {
+    margin-top: -.0625em;
+}
+
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix input,
+.mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix input {
+    margin-top: 1px;
+}
+
+.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+    -webkit-animation: cdk-text-field-autofill-end 0s 1ms;
+    animation: cdk-text-field-autofill-end 0s 1ms;
+}
+
+.mat-input-element {
+    font: inherit;
+    background: rgba(0, 0, 0, 0);
+    color: currentColor;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    vertical-align: bottom;
+    text-align: inherit;
+    box-sizing: content-box;
+}
+
+.mat-form-field-label-wrapper {
+    position: absolute;
+    left: 0;
+    box-sizing: content-box;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.mat-form-field-label-wrapper {
+    top: -.84375em;
+    padding-top: .84375em;
+}
+
+.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+    -webkit-animation: cdk-text-field-autofill-end 0s 1ms;
+    animation: cdk-text-field-autofill-end 0s 1ms;
+}
+
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix input,
+.mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix input {
+    margin-top: 1px;
+}
+
+
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix .mat-form-field-label,
+.mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix .mat-form-field-label {
+    color: var(--input-placeholder);
+}
+
+
+.mat-form-field-label {
+    top: 1.34375em;
+}
+
+.mat-form-field-label, .mat-hint {
+    color: #0009;
+}
+
+.mat-form-field-label {
+    position: absolute;
+    left: 0;
+    font: inherit;
+    pointer-events: none;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    transform-origin: 0 0;
+    transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1), color 400ms cubic-bezier(0.25, 0.8, 0.25, 1), width 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: none;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-label {
+    top: 1.09375em;
+    margin-top: -.5em;
+}
+
+.mat-form-field-label:not(.mat-form-field-empty) {
+    transition: none;
+}
+
+.mat-form-field-empty.mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    display: block;
+}
+
+.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+.mat-form-field-appearance-fill.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+    transform: translateY(-.59375em) scale(.75);
+    width: 133.3333333333%;
+}
+
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-suffix,
+.mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-suffix {
+    display: flex;
+    align-items: center;
+    margin-right: -8px;
+    margin-top: -12px;
+    color: var(--text-primary);
+}
+
+.mat-form-field-prefix, .mat-form-field-suffix {
+    white-space: nowrap;
+    flex: none;
+    position: relative;
+}
+
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+    color: #0000008a;
+}
+
+
+.mat-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button {
+    box-sizing: border-box;
+    position: relative;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    display: inline-block;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: baseline;
+    text-align: center;
+    margin: 0;
+    min-width: 64px;
+    line-height: 36px;
+    padding: 0 16px;
+    border-radius: 4px;
+    overflow: visible;
+}
+
+.mat-icon-button {
+    padding: 0;
+    min-width: 0;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    line-height: 40px;
+    border-radius: 50%;
+}
+
+.mat-form-field-prefix .mat-icon-button, .mat-form-field-suffix .mat-icon-button {
+    height: 1.5em;
+    width: 1.5em;
+}
+
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: inherit;
+    width: 2.5em;
+    height: 2.5em;
+}
+
+
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-datepicker-toggle-default-icon,
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button .mat-datepicker-toggle-default-icon, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button .mat-datepicker-toggle-default-icon {
+    margin: auto;
+}
+
+.mat-button .mat-button-wrapper > *, .mat-flat-button .mat-button-wrapper > *, .mat-stroked-button .mat-button-wrapper > *, .mat-raised-button .mat-button-wrapper > *, .mat-icon-button .mat-button-wrapper > *, .mat-fab .mat-button-wrapper > *, .mat-mini-fab .mat-button-wrapper > * {
+    vertical-align: middle;
+}
+
+.mat-datepicker-toggle .mat-datepicker-toggle-default-icon {
+    -webkit-mask: url(https://cm-static.com/calendar.a660721da7763d3d.svg) no-repeat center;
+    mask: url(https://cm-static.com/calendar.a660721da7763d3d.svg) no-repeat center;
+    background: var(--text-primary);
+}
+
+.layout .content .main-map .main-map-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chart .chart-in .legend-list {
+    padding: 0 54px 5px 16px;
+    margin: -1px -6px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chart .chart-in .legend-list {
+    padding: 0 54px 5px 16px;
+    margin: -1px -6px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chart .chart-in .legend-list .chart .chart-in {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: .4px;
+    padding: 1px 6px;
+}
+
+.chart .chart-in .chart-legend-item-in {
+    cursor: pointer;
+}
+
+.chart .chart-in .mat-tooltip-trigger {
+    display: flex;
+    align-items: center;
+}
+
+.disable-select-text {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.chart .chart-in .chart-legend-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.chart .chart-in .chart-legend-icon svg {
+    height: unset;
+}
+
+.chart .chart-in button.icon.small {
+    position: absolute;
+    top: 5px;
+    right: 25px;
+}
+
+.chart .chart-in button.icon.small {
+    width: 32px;
+    height: 32px;
+    z-index: 9;
+}
+
+.chart .chart-in button.icon {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    position: relative;
+    z-index: 9;
+    white-space: nowrap;
+    padding: 0;
+    color: var(--btn-link-secondary);
+}
+
+
+.ui-chart-legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: .4px;
+    padding: 1px 6px;
+}
+
+.ui-chart-legend-item .text {
+    padding-left: 5px;
+}
+
+
+.mat-button, .mat-icon-button, .mat-stroked-button {
+    color: white;
+    background: rgba(0, 0, 0, 0);
+}
+
+.mat-datepicker-toggle .mat-icon-button {
+    color: white;
+}
+
+.chart canvas {
+    height: 280px !important;
+}
+
+
+@media (max-width: 980px) {
+    .cm-chart-options {
+        display: none;
+    }
+}
+
+
+/*DatePickers*/
+.datepicker-parent{
+    position: fixed;
+    bottom: 212px;
+    z-index: 10;
+}
+.datepicker-datefrom{
+    bottom: 212px;
+}
+.datepicker-dateto{
+    bottom: 140px;
+}
+.datepicker-main{
+    display: inline-block;
+    position: fixed;
+    bottom: 345px;
+    z-index: 10;
+    left: 20px;
+}
+
+.error-message{
+    padding: 20px;
+    color: #9f3535;
+}

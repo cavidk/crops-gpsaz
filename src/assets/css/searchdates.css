@@ -1,0 +1,504 @@
+.ui-map .cm-map-index-layer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 9;
+}
+
+.cm-map-index-layer .scenes-container {
+    display: flex;
+}
+
+.cm-map-index-layer .scenes-container .datepicker-container {
+    position: relative;
+}
+
+.cm-map-index-layer .ui-date-only-picker {
+    overflow: hidden;
+    display: block;
+}
+
+.cm-map-index-layer .wrap-date-picker {
+    position: relative;
+    width: 56px;
+    background: var(--background-minor);
+}
+
+.cm-map-index-layer .wrap-date-picker .mat-form-field.disabled-datePicker {
+    background: rgba(var(--background-minor-rgb), .8);
+    pointer-events: none;
+}
+
+.cm-map-index-layer .ui-date-only-picker .mat-form-field-appearance-fill,
+.cm-map-index-layer .ui-date-only-picker .mat-form-field-type-mat-input.mat-form-field-appearance-fill {
+    position: relative;
+    width: 100%;
+    padding: 0;
+    border-radius: 8px;
+    background: var(--input-background);
+}
+
+.cm-map-index-layer .wrap-date-picker .mat-form-field.disabled-datePicker {
+    background: rgba(var(--background-minor-rgb), .8);
+    pointer-events: none;
+}
+
+.cm-map-index-layer .wrap-date-picker .mat-form-field {
+    width: 60px !important;
+    height: 56px;
+    padding: 5px 12px 0 0 !important;
+    margin-top: -8px;
+    margin-left: -2px;
+    border-radius: 0;
+    background: var(--background-minor);
+}
+
+.cm-map-index-layer.mat-form-field {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+}
+
+.cm-map-index-layer .mat-form-field {
+    font-size: inherit;
+    font-weight: 400;
+    line-height: 1.125;
+    font-family: Roboto, Helvetica Neue, sans-serif;
+    letter-spacing: normal;
+}
+
+.cm-map-index-layer .mat-form-field-appearance-fill .mat-form-field-wrapper,
+.cm-map-index-layer .mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper {
+    padding: 0;
+}
+
+.cm-map-index-layer .mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex,
+.cm-map-index-layer .mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex {
+    min-height: 56px;
+    align-items: stretch;
+    background: 0;
+    border-radius: 0;
+    padding: .75em .75em 0;
+}
+
+.cm-map-index-layer .mat-form-field-flex {
+    display: inline-flex;
+    align-items: baseline;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.cm-map-index-layer .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix,
+.cm-map-index-layer .mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+    font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: .4px;
+}
+
+.cm-map-index-layer .mat-form-field-appearance-fill .mat-form-field-infix {
+    padding: .25em 0 .75em;
+}
+
+.cm-map-index-layer .mat-form-field-infix {
+    display: block;
+    position: relative;
+    flex: auto;
+    min-width: 0;
+    width: 180px;
+}
+
+.cm-map-index-layer .mat-form-field-infix {
+    padding: .5em 0;
+    border-top: .84375em solid rgba(0, 0, 0, 0);
+}
+
+.cm-map-index-layer .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-suffix,
+.cm-map-index-layer .mat-form-field.mat-form-field-type-mat-input.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-suffix {
+    display: flex;
+    align-items: center;
+    margin-right: -8px;
+    margin-top: -12px;
+    color: var(--text-primary);
+}
+
+.cm-map-index-layer .mat-datepicker-toggle,
+.cm-map-index-layer .mat-datepicker-content .mat-calendar-next-button,
+.cm-map-index-layer .mat-datepicker-content .mat-calendar-previous-button {
+    color: #0000008a;
+}
+
+.cm-map-index-layer .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
+.cm-map-index-layer .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: inherit;
+    width: 2.5em;
+    height: 2.5em;
+}
+
+.cm-map-index-layer .mat-form-field-prefix,
+.cm-map-index-layer .mat-form-field-suffix {
+    white-space: nowrap;
+    flex: none;
+    position: relative;
+}
+
+.cm-map-index-layer .mat-button,
+.cm-map-index-layer .mat-icon-button,
+.cm-map-index-layer .mat-stroked-button,
+.cm-map-index-layer .mat-flat-button {
+    box-sizing: border-box;
+    position: relative;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    display: inline-block;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: baseline;
+    text-align: center;
+    margin: 0;
+    min-width: 64px;
+    line-height: 36px;
+    padding: 0 16px;
+    border-radius: 4px;
+    overflow: visible;
+}
+
+.cm-map-index-layer .mat-icon-button {
+    padding: 0;
+    min-width: 0;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    line-height: 40px;
+    border-radius: 50%;
+    color: var(--btn-link-secondary);
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.cm-map-index-layer .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button .mat-datepicker-toggle-default-icon,
+.cm-map-index-layer .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button .mat-datepicker-toggle-default-icon {
+    margin: auto;
+}
+
+.cm-map-index-layer .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-datepicker-toggle-default-icon,
+.cm-map-index-layer .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.cm-map-index-layer .mat-datepicker-toggle .mat-datepicker-toggle-default-icon {
+    -webkit-mask: url(https://cm-static.com/calendar.a660721da7763d3d.svg) no-repeat center;
+    mask: url(https://cm-static.com/calendar.a660721da7763d3d.svg) no-repeat center;
+    background: var(--btn-link-secondary);
+}
+
+.cm-map-index-layer .mat-datepicker-toggle .mat-icon-button:hover {
+    color: white;
+}
+
+.cm-map-index-layer .scenes-container .scene-list-container {
+    width: calc(100% - 56px);
+}
+
+.cm-map-index-layer .cm-scene-list {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    width: 100%;
+    background: var(--background-minor);
+    z-index: 5;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.cm-map-index-layer .backBtn {
+    border-right: 1px solid var(--border-secondary);
+}
+
+.cm-map-index-layer .backBtn, .cm-map-index-layer .forwardBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+}
+
+.cm-map-index-layer button.icon.small {
+    width: 32px;
+    height: 32px;
+    z-index: 9;
+}
+
+.cm-map-index-layer button.icon {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    position: relative;
+    z-index: 9;
+    white-space: nowrap;
+    padding: 0;
+    color: var(--btn-link-secondary);
+}
+
+.cm-map-index-layer .backBtn .mat-icon,
+.cm-map-index-layer .forwardBtn .mat-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.cm-map-index-layer button.icon .mat-icon svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cm-map-index-layer .d-none {
+    display: none !important;
+}
+
+.cm-map-index-layer .scenes-container .datepicker-container .ui-pro-label {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}
+
+.cm-map-index-layer .ui-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2px;
+    height: 14px;
+    min-width: 18px;
+    max-width: 100%;
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 100%;
+    letter-spacing: initial;
+    color: var(--label-text);
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    text-transform: initial;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background-color: var(--label-pro);
+}
+
+.cm-map-index-layer .ui-label .value {
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.cm-map-index-layer .drag-scroll {
+    height: 48px;
+    width: 100%;
+    background: var(--background-minor);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.cm-map-index-layer .drag-scroll {
+    overflow: hidden;
+    display: block;
+}
+
+.cm-map-index-layer .drag-scroll .drag-scroll-wrapper {
+    overflow: visible !important;
+}
+
+.cm-map-index-layer .drag-scroll-content {
+    height: 100%;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.cm-map-index-layer .drag-scroll .drag-scroll-content {
+    overflow: visible !important;
+    overflow-y: hidden !important;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item {
+    width: 100px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: .25px;
+    white-space: normal;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item .scene-item-content {
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    cursor: pointer;
+}
+
+@media (max-width: 980px) {
+    .cm-map-index-layer .drag-scroll .scene-item .scene-item-content {
+        padding: 0 8px;
+    }
+}
+
+.cm-map-index-layer .drag-scroll .scene-item .scene-item-content .scene-item-in {
+    display: flex;
+    align-items: flex-start;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item .scene-item-content .scene-icon {
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item .scene-item-content .scene-item-text {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 20px;
+    overflow: hidden;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item .scene-item-content .scene-item-text {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 20px;
+    overflow: hidden;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item .scene-item-content .mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 0;
+    line-height: 0;
+}
+
+.cm-map-index-layer .drag-scroll .scene-list-item {
+    height: 48px;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.cm-map-index-layer .lock-scene {
+    padding: 0 10px;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item .scene-item-content .mat-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+@media (min-width: 981px) {
+    .cm-map-index-layer button.icon:hover {
+        cursor: pointer;
+    }
+}
+
+.cm-map-index-layer button.icon:hover {
+    color: var(--btn-link-secondary-hover);
+}
+
+.cm-map-index-layer .backBtn .mat-icon,
+.cm-map-index-layer .forwardBtn .mat-icon {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.cm-map-index-layer .backBtn .mat-icon svg,
+.cm-map-index-layer .forwardBtn .mat-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.cm-map-index-layer .drag-scroll .scene-item:hover {
+    color: var(--text-secondary);
+    background: var(--background-primary);
+}
+
+.cm-map-index-layer .drag-scroll .scene-item.active {
+    background-color: var(--background-selected);
+    color: var(--accent-primary);
+}
+
+/*Datepicker*/
+.react-datepicker {
+    font-family: 'Roboto';
+    font-size: 0.8rem;
+    background-color: var(--background-minor);
+    color: #fff;
+    border: unset;
+    border-radius: unset;
+    display: inline-block;
+    position: relative;
+}
+
+.react-datepicker__header {
+    text-align: center;
+    background-color: var(--background-minor);
+    border-bottom: 1px solid #aeaeae;
+    border-top-left-radius: 0.3rem;
+    padding: 8px 0;
+    position: relative;
+}
+
+.react-datepicker__current-month, .react-datepicker-time__header, .react-datepicker-year-header {
+    margin-top: 0;
+    color: var(--label-text);
+    font-weight: 500;
+    font-size: 0.944rem;
+    user-select: none;
+}
+.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {
+    color: var(--label-text);
+    display: inline-block;
+    width: 1.7rem;
+    line-height: 1.7rem;
+    text-align: center;
+    user-select: none;
+    margin: 0.166rem;
+}
+.react-datepicker__day:hover, .react-datepicker__month-text:hover, .react-datepicker__quarter-text:hover, .react-datepicker__year-text:hover {
+    border-radius: 0.3rem;
+    background-color: var(--background-primary);
+}
+.react-datepicker__day--disabled, .react-datepicker__month-text--disabled, .react-datepicker__quarter-text--disabled, .react-datepicker__year-text--disabled {
+    cursor: default;
+    color: #8c9299 !important;
+}
+.react-datepicker__day--disabled:hover{
+    background-color: var(--background-minor);
+}
+
+.react-datepicker__day--selected{
+    background-color: var(--background-primary);
+}
+
+.react-datepicker__day--keyboard-selected {
+    background-color: var(--background-secondary);
+}
+/*End Datepicker*/
+
+
+.react-horizontal-scrolling-menu--inner-wrapper {
+    height: 100% !important;
+}
+.react-horizontal-scrolling-menu--wrapper {
+    height: 100% !important;
+}
