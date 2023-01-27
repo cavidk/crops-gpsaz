@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import GeometryUtil from "leaflet-geometryutil";
 import wkt from "wkt";
 import L from "leaflet";
 import Moment from "moment";
 import Loading from "../Loader/Loading";
-import { useSelector, useDispatch } from "react-redux";
-import { setSelectedZone } from "../../slices/selectedZoneSlice";
-import { setSelectedDate } from "../../slices/selectedDateSlice";
-import { setAvailableDates } from "../../slices/availableDatesSlice";
+import {useSelector, useDispatch} from "react-redux";
+import {setSelectedZone} from "../../slices/selectedZoneSlice";
+import {setSelectedDate} from "../../slices/selectedDateSlice";
+import {setAvailableDates} from "../../slices/availableDatesSlice";
 
 const request = require("../../utils/request");
 
@@ -47,7 +47,7 @@ const Fields = (props) => {
             "Content-Type": "application/json",
             Authorization: "Bearer " + JSON.parse(sessionStorage.getItem("jwt")),
         };
-        fetch(request.REACT_APP_API_BASE_URL + `zones?page=1`, { headers })
+        fetch(request.REACT_APP_API_BASE_URL + `zones?page=1`, {headers})
             .then((response) => response.json())
             .then((response) => {
                 setZones(response.data.data);
@@ -62,13 +62,15 @@ const Fields = (props) => {
 
     useEffect(() => {
         if (searchText !== null) {
-            fetchMoreData(searchText, true).then((r) => {});
+            fetchMoreData(searchText, true).then((r) => {
+            });
         }
     }, [searchText]);
 
     useEffect(() => {
         if (polygon) {
-            getTimeSeries(polygon, cloudCoverage).then((r) => {});
+            getTimeSeries(polygon, cloudCoverage).then((r) => {
+            });
         }
     }, [cloudCoverage]);
 
@@ -103,7 +105,7 @@ const Fields = (props) => {
                 const res = await fetch(
                     request.REACT_APP_API_BASE_URL +
                     `zones?page=${_page}&query=${searchQuery}`,
-                    { headers }
+                    {headers}
                 ).then((response) => response.json());
                 return res;
             };
@@ -139,7 +141,7 @@ const Fields = (props) => {
                 dataLength={zones.length}
                 next={fetchMoreData}
                 hasMore={hasMore}
-                loader={<Loading />}
+                loader={<Loading/>}
                 scrollableTarget="field-list"
             >
                 {zones.map((i, index) => (
@@ -246,34 +248,16 @@ const Fields = (props) => {
         let wktgeomZone = wkt.parse(_polygon.geometry);
         let geojsonFeatures = {
             type: "Feature",
-            properties: { name: _polygon.name },
+            properties: {name: _polygon.name},
             geometry: wktgeomZone,
         };
-        let myStyle = { opacity: 1 };
-        let zoneGeofence = L.geoJSON(geojsonFeatures, { style: myStyle });
+        let myStyle = {opacity: 1};
+        let zoneGeofence = L.geoJSON(geojsonFeatures, {style: myStyle});
         let bboxCoords = zoneGeofence.getBounds();
-        let bboxText =
-            bboxCoords._southWest.lng +
-            "," +
-            bboxCoords._southWest.lat +
-            "," +
-            bboxCoords._northEast.lng +
-            "," +
-            bboxCoords._northEast.lat;
-        let today = new Date();
-        let oneYrAgo = new Date();
-        oneYrAgo.setFullYear(today.getFullYear() - 1);
-        let dateStrToday = Moment(today).format("YYYY-MM-DDTHH:mm:ss");
-        let dateStrYearBefore = Moment(oneYrAgo).format("YYYY-MM-DDTHH:mm:ss");
-        let request_url =
-            "timeseries?bbox=" +
-            bboxText +
-            "&datetime=" +
-            dateStrYearBefore +
-            "Z/" +
-            dateStrToday +
-            "Z&collections=sentinel-2-l2a&cloud_coverage=" +
-            _cloudCoverage;
+        let bboxText = bboxCoords._southWest.lng + "," + bboxCoords._southWest.lat + "," + bboxCoords._northEast.lng + "," + bboxCoords._northEast.lat;
+        let dateFrom = Moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format("YYYY-MM-DDTHH:mm:ss");
+        let dateTo = Moment(new Date()).format("YYYY-MM-DDTHH:mm:ss");
+        let request_url = "timeseries?bbox=" + bboxText + "&datetime=" + dateFrom + "Z/" + dateTo + "Z&collections=sentinel-2-l2a&cloud_coverage=" + _cloudCoverage;
 
         const headers = {
             "Content-Type": "application/json",
@@ -292,7 +276,6 @@ const Fields = (props) => {
         });
         dispatch(setSelectedDate(new Date(timeSeries[0])));
         dispatch(setAvailableDates(timeSeries));
-        callApiSelectedTimeSelected(sentinelType, timeSeries[0], _polygon);
     }
 
     function calculateArea(_polygon) {
@@ -300,7 +283,7 @@ const Fields = (props) => {
             let wktgeomZone = wkt.parse(_polygon.geometry);
             let geojsonFeatures = {
                 type: "Feature",
-                properties: { name: _polygon.name },
+                properties: {name: _polygon.name},
                 geometry: wktgeomZone,
             };
             let myStyle = {
@@ -389,7 +372,8 @@ const Fields = (props) => {
         dispatch(setSelectedZone(_polygon.id));
 
         setPolygon(_polygon);
-        getTimeSeries(_polygon).then((r) => {});
+        getTimeSeries(_polygon).then((r) => {
+        });
         let wktGeom = wkt.parse(_polygon.geometry);
         let zoneInMinimap = L.geoJSON(wktGeom);
         _map.fitBounds(zoneInMinimap.getBounds(), {
@@ -414,7 +398,7 @@ const Fields = (props) => {
         let wktgeomZone = wkt.parse(_polygon.geometry);
         let geojsonFeatures = {
             type: "Feature",
-            properties: { name: _polygon.name },
+            properties: {name: _polygon.name},
             geometry: wktgeomZone,
         };
         let zoneGeofence = new L.geoJSON(geojsonFeatures, {
@@ -459,16 +443,17 @@ const Fields = (props) => {
     }
 
     function callApiSelectedTimeSelected(_layer = "NDVI", _date, _polygon) {
+        console.log(_date, _polygon)
         if (_polygon) {
             showLoader(_polygon.id);
             let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
-            if (_sentinelHubLayer) {
-                props.map.removeLayer(_sentinelHubLayer);
-            }
+            // if (_sentinelHubLayer) {
+            //     props.map.removeLayer(_sentinelHubLayer);
+            // }
             let wktgeomZone = wkt.parse(_polygon.geometry);
             let geojsonFeatures = {
                 type: "Feature",
-                properties: { name: _polygon.name },
+                properties: {name: _polygon.name},
                 geometry: wktgeomZone,
             };
             let zoneGeofence = new L.geoJSON(geojsonFeatures, {
@@ -489,7 +474,7 @@ const Fields = (props) => {
                     transparent: true,
                     format: "image/png",
                     geometry: _polygon.geometry,
-                    tiled: true,
+                    // tiled: true,
                     maxZoom: 18,
                     reuseTiles: true,
                 })

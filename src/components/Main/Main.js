@@ -31,6 +31,8 @@ const Main = (props) => {
 
     useEffect(() => {
         if (window.innerWidth <= 980) {
+            setSidebarClass("")
+            setSidebarButtonText("Open fields")
             setSidebarMobileClass("mobile")
         }
         window.addEventListener('resize', () => {

@@ -945,6 +945,33 @@ input:-webkit-autofill:active {
     -webkit-text-fill-color: var(--text-primary) !important;
 }
 
-.togglePassword{
+.togglePassword {
     color: var(--progress-schedule) !important;
+}
+
+@media (max-width: 1024px) {
+    .ui-login-page .login-bg {
+        display: none;
+    }
+
+    .ui-login-page .container-form {
+        width: 100%;
+    }
+}
+
+.ui-login-page .container-form .logo {
+    margin: 12px 0 0 12px;
+}
+
+@media (min-width: 1025px) {
+    .ui-login-page .container-form .logo {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .ui-login-page .container-form .form-wrap .form-wrap-2 {
+        padding: 0 20px;
+        width: auto;
+    }
 }

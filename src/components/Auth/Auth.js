@@ -12,11 +12,12 @@ const Auth = () => {
         <div className="cm-root">
             <div className="ui-login-page">
                 <div className="login-bg"
-                     style={{background: 'url('+image+') 90% 40% / cover no-repeat'}}>
+                     style={{background: 'url(' + image + ') 90% 40% / cover no-repeat'}}>
                     <div className="logo">
                         <div role="img" className="mat-icon mat-icon-no-color" aria-hidden="true"
                              data-mat-icon-type="svg" data-mat-icon-name="logo_search">
-                            <img src={require('../../assets/images/favicon.png')} alt="Crop Monitoring: Satellite-Based Software For Agricultural Needs"/>
+                            <img src={require('../../assets/images/favicon.png')}
+                                 alt="Crop Monitoring: Satellite-Based Software For Agricultural Needs"/>
                         </div>
                     </div>
                     <div className="ui-carousel login-carousel">
@@ -34,8 +35,10 @@ const Auth = () => {
                             <div className="carousel-indicator">
                                 <div data-id="carousel-indicator" data-item="0"
                                      className="ng-star-inserted active"></div>
-                                <div data-id="carousel-indicator" data-item="1" className="ng-star-inserted d-none"></div>
-                                <div data-id="carousel-indicator" data-item="2" className="ng-star-inserted d-none"></div>
+                                <div data-id="carousel-indicator" data-item="1"
+                                     className="ng-star-inserted d-none"></div>
+                                <div data-id="carousel-indicator" data-item="2"
+                                     className="ng-star-inserted d-none"></div>
                             </div>
                             <div className="carousel-arrows">
                                 <button data-id="carousel-arrow-back" className="carousel-arrow">
@@ -71,6 +74,13 @@ const Auth = () => {
 
 
                 <div className="container-form">
+                    <div className="logo ng-star-inserted">
+                        <div role="img" className="mat-icon notranslate mat-icon-no-color"
+                             aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="logo_search">
+                            <img src={require('../../assets/images/favicon.png')}
+                                 alt="Crop Monitoring: Satellite-Based Software For Agricultural Needs"/>
+                        </div>
+                    </div>
                     <div className="lang-select d-none">
                         <ng-select
                             className="ng-select-transparent ng-select ng-select-single ng-valid">
@@ -114,7 +124,7 @@ const Auth = () => {
                                             <button data-id="sign-in-button" className="checked"> Sign In</button>
                                         </div>
                                     </div>
-                                    <Login />
+                                    <Login/>
                                 </div>
                             </div>
                         </div>
