@@ -6,7 +6,7 @@ import wkt from "wkt";
 import * as L from "leaflet";
 import Moment from "moment";
 import axios from "axios"
-import Loading from '../loader/Loading'
+import Loading from '../Loader/Loading'
 const request = require('../../resources/request');
 
 const REACT_APP_SENTINEL_NDVI_API_ENDPOINT = process.env.REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
