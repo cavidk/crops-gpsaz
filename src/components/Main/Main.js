@@ -73,10 +73,6 @@ const Main = (props) => {
         }
     }
 
-
-
-
-
     return (
         <React.Fragment>
             <div className={"container"}>

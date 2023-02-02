@@ -12,7 +12,7 @@ import {setAvailableDates} from "../../slices/availableDatesSlice";
 
 const request = require("../../utils/request");
 
-const REACT_APP_SENTINEL_NDVI_API_ENDPOINT = process.env.REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
+const REACT_APP_SENTINEL_NDVI_API_ENDPOINT = process.env.REACT_APP_SENTINEL_API_ENDPOINT;
 const REACT_APP_GOOGLESAT_URL = process.env.REACT_APP_GOOGLESAT_URL;
 const REACT_APP_OSRM_URL = process.env.REACT_APP_OSRM_URL;
 
@@ -447,9 +447,10 @@ const Fields = (props) => {
         if (_polygon) {
             showLoader(_polygon.id);
             let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
-            // if (_sentinelHubLayer) {
-            //     props.map.removeLayer(_sentinelHubLayer);
-            // }
+            console.log("baseUrl: ", baseUrl)
+            if (_sentinelHubLayer) {
+                props.map.removeLayer(_sentinelHubLayer);
+            }
             let wktgeomZone = wkt.parse(_polygon.geometry);
             let geojsonFeatures = {
                 type: "Feature",
@@ -461,25 +462,30 @@ const Fields = (props) => {
                     color: "red",
                     weight: 1,
                     opacity: 1,
-                    // dashArray: '20,10',
                     lineJoin: "round",
                     fillOpacity: 0,
                 },
             });
             zoneGeofence.addTo(props.map);
-            let sentinelHubLayer = L.tileLayer
-                .wms(baseUrl, {
-                    layers: _layer,
-                    time: Moment(_date).format("YYYY-MM-DD"),
-                    transparent: true,
-                    format: "image/png",
-                    geometry: _polygon.geometry,
-                    // tiled: true,
-                    maxZoom: 18,
-                    reuseTiles: true,
-                })
-                .addTo(props.map)
-                .bringToFront();
+
+            let sentinelHubLayer = L.tileLayer.wms(baseUrl, {
+                attribution: '&copy; <a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
+                tileSize: 512,
+                maxcc: 50,
+                layers: _layer,
+                time: Moment(_date).format("YYYY-MM-DD"),
+                gain: "0.3",
+                gamma: "0.8",
+                transparent: "true",
+                format: 'image/png',
+                // make sure that coordinates in the geometry parameter are in the same CRS that is set for the layer
+                maxZoom: 18,
+                reuseTiles: true,
+                tiled: true,
+                crs: L.CRS.EPSG4326,
+                geometry: _polygon.geometry,
+            }).addTo(props.map).bringToFront();
+
             _sentinelHubLayer = sentinelHubLayer;
             props.map.fitBounds(zoneGeofence.getBounds(), {
                 maxZoom: 18,
