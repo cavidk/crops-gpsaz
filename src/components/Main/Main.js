@@ -57,6 +57,9 @@ const Main = (props) => {
             zoomControl: true,
             layers: [osm, gst]
         });
+
+
+
         setMap(map)
         return () => {
             map.remove();

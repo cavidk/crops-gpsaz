@@ -443,11 +443,9 @@ const Fields = (props) => {
     }
 
     function callApiSelectedTimeSelected(_layer = "NDVI", _date, _polygon) {
-        console.log(_date, _polygon)
         if (_polygon) {
             showLoader(_polygon.id);
             let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
-            console.log("baseUrl: ", baseUrl)
             if (_sentinelHubLayer) {
                 props.map.removeLayer(_sentinelHubLayer);
             }
@@ -468,23 +466,52 @@ const Fields = (props) => {
             });
             zoneGeofence.addTo(props.map);
 
-            let sentinelHubLayer = L.tileLayer.wms(baseUrl, {
-                attribution: '&copy; <a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
-                tileSize: 512,
+
+            //  L.tileLayer(baseUrl, {
+            //     attribution: '&copy; <a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
+            //     tileSize: 512,
+            //     maxcc: 50,
+            //     layers: _layer,
+            //     time: Moment(_date).format("YYYY-MM-DD"),
+            //     gain: "0.3",
+            //     gamma: "0.8",
+            //     transparent: "true",
+            //     format: 'image/png',
+            //     maxZoom: 18,
+            //     reuseTiles: 'true',
+            //     tiled: 'true',
+            //     geometry: _polygon.geometry,
+            // }).addTo(props.map).bringToFront();
+            console.log("BBOX:",zoneGeofence.getBounds().toBBoxString())
+            const _bbox = zoneGeofence.getBounds().toBBoxString();
+            const options = {
+                attribution: '<a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
+                width:512,
+                height:512,
                 maxcc: 50,
+                styles: '',
                 layers: _layer,
                 time: Moment(_date).format("YYYY-MM-DD"),
                 gain: "0.3",
                 gamma: "0.8",
-                transparent: "true",
+                transparent: true,
                 format: 'image/png',
-                // make sure that coordinates in the geometry parameter are in the same CRS that is set for the layer
+                version: '1.1.1',
                 maxZoom: 18,
                 reuseTiles: true,
                 tiled: true,
-                crs: L.CRS.EPSG4326,
                 geometry: _polygon.geometry,
-            }).addTo(props.map).bringToFront();
+                request: "getMap",
+                service: "WMS",
+                bbox: _bbox,
+                srs: 'EPSG:4326'
+            };
+            let url = baseUrl + '?';
+
+            for (const key in options) {
+                url += `${key}=${options[key]}&`;
+            }
+            let sentinelHubLayer = L.imageOverlay(url, [zoneGeofence.getBounds()]).addTo(props.map);
 
             _sentinelHubLayer = sentinelHubLayer;
             props.map.fitBounds(zoneGeofence.getBounds(), {
