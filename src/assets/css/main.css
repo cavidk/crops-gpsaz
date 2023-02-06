@@ -308,6 +308,7 @@ html, body {
 .menu-box .menu-container .bottom-menu .account-sb.active-link {
     color: var(--accent-primary);
 }
+
 .menu-box .menu-container .bottom-menu .account-sb .btn-icon {
     position: relative;
     display: inline-block;
@@ -316,7 +317,6 @@ html, body {
     width: 34px;
     margin-right: 5px;
 }
-
 
 
 .menu-box .menu-container .bottom-menu .account-sb.active .mat-icon,
@@ -465,15 +465,12 @@ html, body {
 }
 
 
-
-
-.menu-box .menu-container .bottom-menu  .footer-bottom-menu.opened   button {
+.menu-box .menu-container .bottom-menu .footer-bottom-menu.opened button {
     margin: 0 auto 14px;
     line-height: 20px;
     border-radius: 8px;
     min-width: 170px;
 }
-
 
 
 .ui-button.primary-small, .ui-button.primary-large {
@@ -1433,9 +1430,11 @@ button:focus, input:focus {
 .mobile.opened .fold-container {
     transform: translateY(0);
     max-height: calc(100% - 68px);
+    display: flex;
 }
 
-.mobile .fold-container, .mobile .fold-container {
+.mobile .fold-container {
+    display: none;
     flex-grow: 1;
     flex: initial;
     width: inherit;
@@ -1487,4 +1486,78 @@ button:focus, input:focus {
 .react-datepicker {
     height: 268px;
 }
+.ui-legend-cloudness div.cloud-mob {
+    display: none;
+}
+
+.bottom-panel-tools .analytic-legend.opened {
+    height: unset !important;
+}
+
+@media (max-width: 768px) {
+    .search-box {
+        display: none;
+    }
+
+    .bottom-panel-tools .analytic-legend.opened {
+        margin-right: -65px !important;
+        height: 415px !important;
+    }
+
+    .ui-legend-cloudness div.clouds-header, .ui-legend-cloudness div.progress-container {
+        display: none;
+    }
+
+    .ui-legend-cloudness div.cloud-mob {
+        display: flex;
+    }
+}
+
+
+
+
+
+.ui-legend-cloudness   .cloud-mob {
+    background: var(--mapwidget-background);
+    border-radius: 8px;
+    padding: 10px 5px 5px;
+    width: 40px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+}
+.ui-legend-cloudness   .cloud-mob   .mat-icon {
+    width: 22px;
+    height: 14px;
+    margin-bottom: 2px;
+    font-size: 0;
+}
+
+.ui-legend-cloudness  .cloud-val {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+[_nghost-oye-c166]   .cloud-mob[_ngcontent-oye-c166] {
+    background: var(--mapwidget-background);
+    border-radius: 8px;
+    padding: 10px 5px 5px;
+    width: 40px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+}
+
+.leaflet-bar a.leaflet-disabled {
+    background-color: var(--background-primary) !important;
+}
+
+
 

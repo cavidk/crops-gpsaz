@@ -465,24 +465,6 @@ const Fields = (props) => {
                 },
             });
             zoneGeofence.addTo(props.map);
-
-
-            //  L.tileLayer(baseUrl, {
-            //     attribution: '&copy; <a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',
-            //     tileSize: 512,
-            //     maxcc: 50,
-            //     layers: _layer,
-            //     time: Moment(_date).format("YYYY-MM-DD"),
-            //     gain: "0.3",
-            //     gamma: "0.8",
-            //     transparent: "true",
-            //     format: 'image/png',
-            //     maxZoom: 18,
-            //     reuseTiles: 'true',
-            //     tiled: 'true',
-            //     geometry: _polygon.geometry,
-            // }).addTo(props.map).bringToFront();
-            console.log("BBOX:",zoneGeofence.getBounds().toBBoxString())
             const _bbox = zoneGeofence.getBounds().toBBoxString();
             const options = {
                 attribution: '<a href="https://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>',

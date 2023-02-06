@@ -28,21 +28,14 @@ const Main = (props) => {
 
     const selectedZone = useSelector((state) => state.selectedZone);
     const availableDates = useSelector((state) => state.availableDates);
+    const indices = useSelector((state) => state.indices);
 
     useEffect(() => {
-        if (window.innerWidth <= 980) {
-            setSidebarClass("")
-            setSidebarButtonText("Open fields")
-            setSidebarMobileClass("mobile")
-        }
-        window.addEventListener('resize', () => {
-            if (window.innerWidth <= 980) {
-                setSidebarMobileClass("mobile")
-            } else {
-                setSidebarMobileClass("")
-                setSidebarClass("opened")
-            }
-        }, false);
+        console.log("In: ", indices)
+    }, [indices])
+
+
+    useEffect(() => {
         let osm = L.tileLayer(REACT_APP_OSRM_URL, {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         });
@@ -58,9 +51,23 @@ const Main = (props) => {
             layers: [osm, gst]
         });
 
-
-
         setMap(map)
+
+
+        if (window.innerWidth <= 980) {
+            setSidebarClass("")
+            setSidebarButtonText("Open fields")
+            setSidebarMobileClass("mobile")
+        }
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 980) {
+                setSidebarMobileClass("mobile")
+            } else {
+                setSidebarMobileClass("")
+                setSidebarClass("opened")
+            }
+        }, false);
+
         return () => {
             map.remove();
         }

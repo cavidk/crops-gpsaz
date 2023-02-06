@@ -21,15 +21,15 @@ const SearchDates = (props) => {
     const selectedDate = useSelector((state) => state.selectedDate);
     const availableDates = useSelector((state) => state.availableDates);
 
-    const handleClick = useCallback(() => {
+    const handleClick = () => {
         setOpen(!open);
-    }, [open]);
+    }
 
     const handleChange = (e) => {
         setOpen(!open);
         dispatch(setSelectedDate(e))
         scrollTo(e)
-    };
+    }
 
     const changeDateClick = (date) => {
         dispatch(setSelectedDate(date))
@@ -78,6 +78,7 @@ const SearchDates = (props) => {
                                 includeDates={availableDates["availableDates"]}
                                 onClickOutside={handleClickOutside}
                                 wrapperClassName="parent-class"
+                                withPortal={false}
                                 inline/>
                 </div>
             )}

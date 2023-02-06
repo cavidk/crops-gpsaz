@@ -6,11 +6,14 @@ import axios from "axios";
 
 const request = require('../../utils/request');
 import '../../assets/css/timeseries.css';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setIndices} from "../../slices/indicesSlice";
+import {setAvailableDates} from "../../slices/availableDatesSlice";
 
 const BottomPanel = (props) => {
     const refDateFrom = useRef(null);
     const refDateTo = useRef(null);
+    const dispatch = useDispatch();
 
     const [zoneStatistics, setZoneStatistics] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,10 +27,16 @@ const BottomPanel = (props) => {
     const [errorMessage, setErrorMessage] = useState(null);
 
     const selectedZone = useSelector((state) => state.selectedZone);
+    const selectedDate = useSelector((state) => state.selectedDate);
 
     useEffect(() => {
         getStatistics(selectedZone).then(r => {});
+        // getIndices(selectedZone).then(r => {});
     }, [selectedZone])
+
+    useEffect(() => {
+        getIndices(selectedZone).then(r => {});
+    }, [selectedDate])
 
     return (
         <div>
@@ -377,6 +386,35 @@ const BottomPanel = (props) => {
             setZoneStatistics(statistics);
         }
         setLoading(false)
+    }
+
+
+    async function getIndices(selectedZone) {
+        selectedZone = selectedZone['selectedZone']
+        let indices = [];
+        const instance = axios.create({baseURL: request.REACT_APP_API_BASE_URL})
+        const config = {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'Accept': 'application/json',
+                'Authorization': "Bearer " + JSON.parse(sessionStorage.getItem('jwt'))
+            },
+            params: {
+                zone: selectedZone,
+                selectedDate: selectedDate['selectedDate'],
+                sentinelType: "NDVI"
+            }
+        }
+        await instance.get("/v1/zones/" + selectedZone, config).then(resp => {
+            if (resp.data.error) {
+                console.log("Errr: ", resp.data.error.message);
+            } else {
+                indices = resp.data.data
+            }
+        })
+        if (indices.histogram && indices.zone) {
+            dispatch(setIndices(indices));
+        }
     }
 }
 
