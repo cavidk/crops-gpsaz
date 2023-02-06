@@ -433,7 +433,7 @@ const Fields = (props) => {
             unsetHighlight(zoneGeofence);
         });
         zoneGeofence.on("click", function (e) {
-            console.log(_polygon.id);
+            // console.log(_polygon.id);
         });
         _map.fitBounds(zoneGeofence.getBounds(), {
             maxZoom: 16,
@@ -442,7 +442,7 @@ const Fields = (props) => {
         zoneGeofence.addTo(_map);
     }
 
-    function callApiSelectedTimeSelected(_layer = "NDVI", _date, _polygon) {
+    async function callApiSelectedTimeSelected(_layer = "NDVI", _date, _polygon) {
         if (_polygon) {
             showLoader(_polygon.id);
             let baseUrl = REACT_APP_SENTINEL_NDVI_API_ENDPOINT;
@@ -493,19 +493,19 @@ const Fields = (props) => {
             for (const key in options) {
                 url += `${key}=${options[key]}&`;
             }
-            let sentinelHubLayer = L.imageOverlay(url, [zoneGeofence.getBounds()]).addTo(props.map);
+            let sentinelHubLayer = await L.imageOverlay(url, [zoneGeofence.getBounds()]).addTo(props.map);
 
             _sentinelHubLayer = sentinelHubLayer;
             props.map.fitBounds(zoneGeofence.getBounds(), {
                 maxZoom: 18,
                 padding: [30, 50],
             });
-            sentinelHubLayer.on("load", function () {
+            // sentinelHubLayer.on("load", function () {
                 let element = document.getElementById(
                     "sidebarElementChild" + _polygon.id
                 );
                 element.setAttribute("style", "display:none");
-            });
+            // });
         }
     }
 

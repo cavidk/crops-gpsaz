@@ -7,10 +7,6 @@ const BottomPanelTools = () => {
     const [indexBodyClass, setIndexBodyClass] = useState("d-none");
     const indices = useSelector((state) => state.indices);
 
-    useEffect(() => {
-        console.log("Indices: ", indices['indices'])
-    }, [indices])
-
     const handleToggleIndices = () => {
         if (indexBodyClass === "") {
             setIndexBodyClass("d-none");

@@ -388,7 +388,6 @@ const BottomPanel = (props) => {
         setLoading(false)
     }
 
-
     async function getIndices(selectedZone) {
         selectedZone = selectedZone['selectedZone']
         let indices = [];
@@ -407,7 +406,7 @@ const BottomPanel = (props) => {
         }
         await instance.get("/v1/zones/" + selectedZone, config).then(resp => {
             if (resp.data.error) {
-                console.log("Errr: ", resp.data.error.message);
+                console.info("Error: ", resp.data.error.message);
             } else {
                 indices = resp.data.data
             }

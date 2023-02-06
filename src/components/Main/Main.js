@@ -28,12 +28,6 @@ const Main = (props) => {
 
     const selectedZone = useSelector((state) => state.selectedZone);
     const availableDates = useSelector((state) => state.availableDates);
-    const indices = useSelector((state) => state.indices);
-
-    useEffect(() => {
-        console.log("In: ", indices)
-    }, [indices])
-
 
     useEffect(() => {
         let osm = L.tileLayer(REACT_APP_OSRM_URL, {

@@ -37,10 +37,8 @@ const Signup = () => {
         request.signup('register', user, (err, res) => {
             if (err) {
                 setUserCreatedAndSaved(false);
-                // console.log(err)
             } else {
                 setUserCreatedAndSaved(true);
-                // console.log(res.body)
             }
             setError('');
             setOpen(true);

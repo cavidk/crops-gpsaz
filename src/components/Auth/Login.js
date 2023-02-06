@@ -19,7 +19,7 @@ const Login = () => {
     const usernameRef = useRef(null);
 
     useEffect(() => {
-        // console.log(errors)
+
     }, [errors]);
 
     const handleLoginClick = () => {
