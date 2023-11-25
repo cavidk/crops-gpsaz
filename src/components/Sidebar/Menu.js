@@ -55,10 +55,10 @@ const Menu = (props) => {
 
                                 <span className={"btn-text " + collapsedMenuClass}>
                                                <div className="full-user-name">
-                                                   Samig Museyibli
+                                                   
                                                </div>
                                                <div className="team-name">
-                                                   Team samiqmuseyibli
+                                                   Team @GPS.az
                                                </div>
                                             </span>
 

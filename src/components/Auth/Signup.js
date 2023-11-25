@@ -1,135 +1,79 @@
-import React, {useState} from 'react';
-import {Icon, Button, Typography, Input} from '@mui/material';
-import {Link} from 'react-router-dom';
-import * as request from '../../utils/request';
+import React, { useRef, useState } from "react";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import { Style } from "@mui/icons-material"; "/src/assets/css/signUp.css";
 
+const SignUp = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const usernameRef = useRef(null);
 
-const Signup = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [open, setOpen] = useState(false);
-    const [error, setError] = useState('');
-    const [userCreatedAndSaved, setUserCreatedAndSaved] = useState(false);
-
-    const handleChange = (name) => (event) => {
-        switch (name) {
-            case 'username':
-                setUsername(event.target.value);
-                break;
-            case 'password':
-                setPassword(event.target.value);
-                break;
-            case 'email':
-                setEmail(event.target.value);
-                break;
-            default:
-                break;
-        }
+    const handleSignUp = () => {
+        // Your sign-up logic goes here
+        setSubmit(true);
+        let errors = {};
     };
 
-    const handleSignUPClick = () => {
-        const user = {
-            username: username || undefined,
-            email: email || undefined,
-            password: password || undefined,
-        }
-        request.signup('register', user, (err, res) => {
-            if (err) {
-                setUserCreatedAndSaved(false);
-            } else {
-                setUserCreatedAndSaved(true);
-            }
-            setError('');
-            setOpen(true);
-        })
-    }
-
+    const togglePassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
-        <div>
-            <div>
-                <div>
-                    <p type="headline" component="h2">
-                        {/*Welcome to the Simple App Platform. Sign-up to see more.*/}
-                    </p>
-                    <Input
-                        required
-                        id="username"
-                        label="Username"
-                        value={username}
-                        onChange={handleChange('username')}
-                        margin="normal"
-                    /><br />
-                    <Input
-                        required
-                        id="email"
-                        type="email"
-                        label="Email"
-                        value={email}
-                        onChange={handleChange('email')}
-                        margin="normal"
-                    /><br />
+        <div className="signup-container">
+            
+            <form className="signup-form">
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
                     <input
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Enter your username"
                         required
-                        id="password"
-                        type="password"
-                        label="Password"
-                        value={password}
-                        onChange={handleChange('password')}
-                        margin="normal"
-                    /><br />
-                    {error && (
-                        <Typography component="p" color="error">
-                            <Icon color="error">error</Icon>
-                            {error}
-                        </Typography>
-                    )}
+                    />
                 </div>
-                <div>
-                    <Button color="primary" variant="outlined" onClick={handleSignUPClick}>
-                        Sign-Up
-                    </Button>
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <div className="password-input">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter your password"
+                            required
+                        />
+                        <button type="button" onClick={togglePassword}>
+                            {showPassword ? (
+                                <VisibilityOffOutlinedIcon />
+                            ) : (
+                                <VisibilityOutlinedIcon />
+                            )}
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div open={open} disableBackdropClick={true}>
-                <p>User Sign-Up</p>
-
-                {userCreatedAndSaved ? (
-                    <span>
-                    <div>
-                        <p>User successfully signed up.</p>
-                    </div>
-                    <div>
-                        <Link to="/">
-                            <Button color="primary" autoFocus="autoFocus" variant="outlined">
-                                Home
-                            </Button>
-                        </Link>
-                        <a href="/signin">
-                            <Button color="primary" autoFocus="autoFocus" variant="outlined">
-                                Login
-                            </Button>
-                        </a>
-                    </div>
-                </span>
-                ) : (
-                    <span>
-                    <div>
-                        <span>
-                            <Icon color="error">error</Icon>
-                            Sign-Up Failed.
-                            <br/>
-                            The username might already be in use
-                        </span>
-                    </div>
-                </span>
-                )}
-            </div>
+                <div className="form-group">
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Confirm your password"
+                        required
+                    />
+                </div>
+                <button type="button" onClick={handleSignUp}>
+                    Sign Up
+                </button>
+            </form>
         </div>
-
-
     );
+
+    
 };
 
-export default Signup;
+export default SignUp;

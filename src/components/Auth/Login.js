@@ -1,5 +1,5 @@
-import React, {useRef, useState, useEffect} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Social from "./Social";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -15,8 +15,8 @@ const Login = () => {
     const [redirectToReferrer, setRedirectToReferrer] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const location = useLocation();
-    const navigate = useNavigate();
     const usernameRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -69,7 +69,7 @@ const Login = () => {
 
     return (
         <div className="form-in">
-            <Social/>
+            <Social />
             <div className="separator d-none">
                 <span className="or-text">or</span>
             </div>
@@ -106,19 +106,16 @@ const Login = () => {
                                                 (focused === true || username !== "" ? "d-none" : "")
                                             }
                                         >
-                                          <label
-                                              className="mat-form-field-label mat-empty mat-form-field-empty"
-                                              id="mat-form-field-label-21"
-                                          >
-                                            <mat-label>
-                                              samigmuseyibli
-                                            </mat-label>
-                                            <span
-                                                aria-hidden="true"
-                                                className="mat-placeholder-required mat-form-field-required-marker"
-                                            >                                                *
-                                            </span>
-                                          </label>
+                                            <label
+                                                className="mat-form-field-label mat-empty mat-form-field-empty"
+                                                id="mat-form-field-label-21"
+                                            >
+                                                <span
+                                                    aria-hidden="true"
+                                                    className="mat-placeholder-required mat-form-field-required-marker"
+                                                >
+                                                </span>
+                                            </label>
                                         </span>
                                     </div>
                                 </div>
@@ -181,7 +178,7 @@ const Login = () => {
                                             onClick={togglePassword}
                                             className="mat-focus-indicator mat-icon-button mat-button-base togglePassword"
                                         >
-                                              <span className="mat-button-wrapper">
+                                            <span className="mat-button-wrapper">
                                                 <div
                                                     role="img"
                                                     className="mat-icon mat-icon-no-color whunset"
@@ -189,11 +186,11 @@ const Login = () => {
                                                     data-mat-icon-type="svg"
                                                     data-mat-icon-name="eye"
                                                 >
-                                                  {!showPassword && <VisibilityOutlinedIcon/>}
+                                                    {!showPassword && <VisibilityOutlinedIcon />}
 
-                                                    {showPassword && <VisibilityOffOutlinedIcon/>}
+                                                    {showPassword && <VisibilityOffOutlinedIcon />}
                                                 </div>
-                                              </span>
+                                            </span>
                                             <span
                                                 className="mat-ripple mat-button-ripple mat-button-ripple-round"></span>
                                             <span className="mat-button-focus-overlay"></span>
@@ -232,7 +229,7 @@ const Login = () => {
                         type={"button"}
                         className="submit-btn primary-large ui-button"
                     >
-                        <div className="content-wrp"> Sign In</div>
+                        <div className="content-wrp">Login</div>
                     </button>
                 </div>
             </form>
