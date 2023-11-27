@@ -50,12 +50,13 @@ const Menu = (props) => {
                              aria-haspopup="menu">
                             <button className="mat-tooltip-trigger account-sb active-link">
                                           <span className="btn-icon">
+                                               
                                               <AccountCircleIcon/>
                                           </span>
 
                                 <span className={"btn-text " + collapsedMenuClass}>
                                                <div className="full-user-name">
-                                                   
+                                                   <span className>username</span>
                                                </div>
                                                <div className="team-name">
                                                    Team @GPS.az
@@ -83,7 +84,7 @@ const Menu = (props) => {
                                         fill="currentColor"></path>
                                 </svg>
                             </div>
-                            <div className="content-wrp"></div>
+                            <div className="content-wrp">up</div>
                         </button>
                     </div>
                 </div>
