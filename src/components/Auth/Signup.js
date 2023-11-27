@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { Style } from "@mui/icons-material"; "/src/assets/css/signUp.css";
+import "../../assets/css/signup.css"
 
 const SignUp = () => {
     const [username, setUsername] = useState("");
@@ -46,7 +47,7 @@ const SignUp = () => {
                             placeholder="Enter your password"
                             required
                         />
-                        <button type="button" onClick={togglePassword}>
+                        <button id="visible" onClick={togglePassword}>
                             {showPassword ? (
                                 <VisibilityOffOutlinedIcon />
                             ) : (
@@ -66,14 +67,12 @@ const SignUp = () => {
                         required
                     />
                 </div>
-                <button type="button" onClick={handleSignUp}>
+                <button type="button" id="signup-button" onClick={handleSignUp}>
                     Sign Up
                 </button>
             </form>
         </div>
     );
-
-    
 };
 
 export default SignUp;

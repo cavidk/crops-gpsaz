@@ -39,8 +39,8 @@ const Auth = () => {
 
                     <div className="form-wrap">
                         <div className="ui-auth-form">
-                            <div data-id="text" className="text"> Manage your fields easier - Monitor online. Detect in
-                                real-time. Act smart.
+                            <div data-id="text" className="text">
+                                 Manage your fields easier - Monitor online. Detect in real-time. Act smart.
                             </div>
                             <div className="form-wrap-2">
                                 <div data-id="login-form" className="form">
